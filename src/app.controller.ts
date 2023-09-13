@@ -65,8 +65,8 @@ export class AppController {
     
     const usuario = this.appService.findOne({ id: data['id'] });
   
-
-    return usuario;
+    const {password, ...result} = usuario;
+    return result;
   } catch (e){
 
     throw new UnauthorizedException();

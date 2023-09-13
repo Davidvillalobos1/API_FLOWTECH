@@ -6,6 +6,9 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class AppService {
+  findOne(arg0: { id: any; }) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @InjectRepository (Usuario) private readonly userRepository: Repository<Usuario>
   ){
