@@ -63,26 +63,26 @@ export class AppController {
 
 
 
-@Get('user')
-async user(@Req() request: Request) {
-    try {
-        const cookie = request.cookies['jwt'];
+// @Get('user')
+// async user(@Req() request: Request) {
+//     try {
+//         const cookie = request.cookies['jwt'];
 
-        const data = await this.jwtService.verifyAsync(cookie);
+//         const data = await this.jwtService.verifyAsync(cookie);
 
-        if (!data) {
-            throw new UnauthorizedException();
-        }
+//         if (!data) {
+//             throw new UnauthorizedException();
+//         }
 
-        const user = await this.appService.findOne({id: data['id']});
+//         const user = await this.appService.findOne({id: data['id']});
 
-        const {password, ...result} = user;
+//         const {password, ...result} = user;
 
-        return result;
-    } catch (e) {
-        throw new UnauthorizedException();
-    }
-}
+//         return result;
+//     } catch (e) {
+//         throw new UnauthorizedException();
+//     }
+// }
 
   @Post('logout')
     async logout(@Res({passthrough: true}) response: Response) {
