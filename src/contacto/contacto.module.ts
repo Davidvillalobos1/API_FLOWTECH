@@ -4,9 +4,8 @@ import { ContactoController } from './contacto.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Contacto } from './entities/contacto.entity';
 
-
 @Module({
-  imports:[TypeOrmModule.forFeature([Contacto])],
+  imports: [TypeOrmModule.forFeature([Contacto])],
   controllers: [ContactoController],
   providers: [ContactoService],
 })
