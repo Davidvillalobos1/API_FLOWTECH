@@ -1,26 +1,44 @@
+
 import { Injectable } from '@nestjs/common';
-import { CreateServicioDto } from './dto/create-servicio.dto';
-import { UpdateServicioDto } from './dto/update-servicio.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Servicio } from 'src/servicio/entities/servicio.entity';
+import { ServicioDto } from 'src/servicio/dto/servicio.dto';
 
 @Injectable()
 export class ServicioService {
-  create(createServicioDto: CreateServicioDto) {
-    return 'This action adds a new servicio';
+  constructor(
+    @InjectRepository(Servicio)
+    private readonly servicioRepository: Repository<Servicio>,
+  ) {}
+
+  async findAll(): Promise<Servicio[]> {
+    return await this.servicioRepository.find();
   }
 
-  findAll() {
-    return `This action returns all servicio`;
+  async findById(id: number): Promise<Servicio | undefined> {
+    return await this.servicioRepository.findOneById(id);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} servicio`;
+  async create(servicioDto: ServicioDto): Promise<Servicio> {
+    try {
+        const servicio = this.servicioRepository.create(servicioDto);
+        return await this.servicioRepository.save(servicio);
+      } catch (error) {
+        console.log(error.message)
+        return error.message
+
+      
+    }
+    
   }
 
-  update(id: number, updateServicioDto: UpdateServicioDto) {
-    return `This action updates a #${id} servicio`;
+  async update(id: number, servicioDto: ServicioDto): Promise<Servicio> {
+    await this.servicioRepository.update(id, servicioDto);
+    return await this.servicioRepository.findOneById(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} servicio`;
+  async delete(id: number): Promise<void> {
+    await this.servicioRepository.delete(id);
   }
 }
