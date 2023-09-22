@@ -7,15 +7,25 @@ import { Column, Entity, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGene
 @Entity()
 export class Servicio {
     @PrimaryGeneratedColumn ()
-    id: number
+    id: number;
+
     @Column ()
-    nombre_servicio: string
+    nombre_servicio: string;
+
+    @Column ("longtext")
+    foto_servicio: string;
+
     @Column ()
-    foto_servicio: string
+    descripcion_servicio: string;
+
     @Column ()
-    descripcion_servicio: string
-    @Column ()
-    precio_servicio: number
+    precio_servicio: number;
+
+
+
+
+
+
     @ManyToOne (type => UsuarioAdmin, usuarioadmin => usuarioadmin.servicio)
     usuarioadmin: UsuarioAdmin;
     @OneToMany (type => EstadoServicio, estadoservicio => estadoservicio.servicio)

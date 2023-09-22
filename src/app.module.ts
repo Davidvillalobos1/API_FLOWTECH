@@ -19,6 +19,7 @@ import { Servicio } from './servicio/entities/servicio.entity';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioAdmin } from './usuario_admin/entities/usuario_admin.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { ServiciossController } from './servicioss/servicioss.controller';
 
 @Module({
   imports: [ContactoModule,
@@ -48,7 +49,7 @@ import { JwtModule } from '@nestjs/jwt';
   })
 ],
   
-  controllers: [AppController],
+  controllers: [AppController, ServiciossController],
   providers: [AppService],
 })
 export class AppModule {}
