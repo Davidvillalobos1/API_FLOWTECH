@@ -29,7 +29,7 @@ import { ServiciossController } from './servicioss/servicioss.controller';
     port: 3306,
     username: 'root',
     password: 'portafolio2023',
-    database: 'prueba',
+    database: 'flowtech',
     entities: [Contacto, EstadoServicio, Inventario, NuestrosTrabajo, Servicio, Usuario, UsuarioAdmin],
     // entities: [__dirname+"/**/*.entity{.ts,.js}"],//
     synchronize: true,

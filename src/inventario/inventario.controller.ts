@@ -2,10 +2,23 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { InventarioService } from './inventario.service';
 import { CreateInventarioDto } from './dto/create-inventario.dto';
 import { UpdateInventarioDto } from './dto/update-inventario.dto';
+import { Inventario } from 'src/inventario/entities/inventario.entity';
+
+
+
 
 @Controller('inventario')
 export class InventarioController {
   constructor(private readonly inventarioService: InventarioService) {}
+
+
+
+  @Post('agregar-producto')
+  async agregarProducto(@Body() inventarioData: Inventario) {
+    return this.inventarioService.agregarProducto(inventarioData);
+  }
+
+
 
   @Post()
   create(@Body() createInventarioDto: CreateInventarioDto) {
