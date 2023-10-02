@@ -25,9 +25,9 @@ import { ServiciossController } from './servicioss/servicioss.controller';
   imports: [ContactoModule,
   TypeOrmModule.forRoot({
     type: 'mysql',
-    host: 'localhost',
+    host: 'flowtech.ce8qbp7dz1bv.us-east-1.rds.amazonaws.com',
     port: 3306,
-    username: 'root',
+    username: 'admin',
     password: 'portafolio2023',
     database: 'flowtech',
     entities: [Contacto, EstadoServicio, Inventario, NuestrosTrabajo, Servicio, Usuario, UsuarioAdmin],
