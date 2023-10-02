@@ -15,9 +15,27 @@ export class InventarioService {
     private inventarioRepository: Repository<Inventario>,
   ) {}
 
+
+
+
+
   async agregarProducto(inventarioData: Inventario): Promise<Inventario> {
-    const nuevoInventario = this.inventarioRepository.create(inventarioData);
-    return this.inventarioRepository.save(nuevoInventario);
+    try {
+      const nuevoInventario = this.inventarioRepository.create(inventarioData);
+      return this.inventarioRepository.save(nuevoInventario);
+    } catch (error) {
+      console.error(error.message);
+      throw error; // Lanza una excepción en caso de error
+    }
+  }
+
+  async obtenerProductos(): Promise<Inventario[]> {
+    try {
+      return this.inventarioRepository.find(); // Obtiene todos los productos
+    } catch (error) {
+      console.error(error.message);
+      throw error; // Lanza una excepción en caso de error
+    }
   }
 
 

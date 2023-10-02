@@ -10,13 +10,18 @@ import { Inventario } from 'src/inventario/entities/inventario.entity';
 @Controller('inventario')
 export class InventarioController {
   constructor(private readonly inventarioService: InventarioService) {}
-
-
-
   @Post('agregar-producto')
   async agregarProducto(@Body() inventarioData: Inventario) {
     return this.inventarioService.agregarProducto(inventarioData);
   }
+
+  @Get()
+  async findAll() {
+    const productos = await this.inventarioService.obtenerProductos();
+    return { data: productos }; // Devuelve los productos en formato JSON
+  }
+
+
 
 
 
@@ -25,10 +30,7 @@ export class InventarioController {
     return this.inventarioService.create(createInventarioDto);
   }
 
-  @Get()
-  findAll() {
-    return this.inventarioService.findAll();
-  }
+
 
   @Get(':id')
   findOne(@Param('id') id: string) {
