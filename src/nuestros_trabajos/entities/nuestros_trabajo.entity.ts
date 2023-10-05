@@ -6,12 +6,19 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "ty
 export class NuestrosTrabajo {
     @PrimaryGeneratedColumn ()
     id: number
+
     @Column()
     nombre_trabajo: string
+
+
     @Column()
     foto_trabajo: string
+
     @Column()
     descripcion_trabajo: string
+
+
+    
     @ManyToOne(type => UsuarioAdmin, usuarioadmin => usuarioadmin.nuestrostrabajo)
     usuarioadmin: UsuarioAdmin; 
     
