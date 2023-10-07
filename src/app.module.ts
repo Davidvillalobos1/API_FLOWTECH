@@ -20,9 +20,11 @@ import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioAdmin } from './usuario_admin/entities/usuario_admin.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ServiciossController } from './servicioss/servicioss.controller';
+import { FormularioAgendarModule } from './formulario_agendar/formulario_agendar.module';
 
 @Module({
-  imports: [ContactoModule,
+  imports: [
+    ContactoModule,
   TypeOrmModule.forRoot({
     type: 'mysql',
     host: 'flowtech.ce8qbp7dz1bv.us-east-1.rds.amazonaws.com',
@@ -46,10 +48,13 @@ import { ServiciossController } from './servicioss/servicioss.controller';
   JwtModule.register({
     secret: 'secret',
     signOptions: {expiresIn: '1d'}
-  })
-],
+  }),
+    FormularioAgendarModule,
   
-  controllers: [AppController, ServiciossController],
+  controllers: [
+    AppController,
+    ServiciossController,
+  ],
   providers: [AppService],
 })
 export class AppModule {}
