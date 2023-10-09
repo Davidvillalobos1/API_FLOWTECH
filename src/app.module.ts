@@ -20,41 +20,50 @@ import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioAdmin } from './usuario_admin/entities/usuario_admin.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ServiciossController } from './servicioss/servicioss.controller';
-import { FormularioAgendarModule } from './formulario_agendar/formulario_agendar.module';
+import { ContactoController } from './contacto/contacto.controller';
+import { ServicioAgendadoModule } from './servicio_agendado/servicio_agendado.module';
+import { ServicioAgendado } from './servicio_agendado/entities/servicio_agendado.entity';
 
 @Module({
   imports: [
-    ContactoModule,
-  TypeOrmModule.forRoot({
-    type: 'mysql',
-    host: 'flowtech.ce8qbp7dz1bv.us-east-1.rds.amazonaws.com',
-    port: 3306,
-    username: 'admin',
-    password: 'portafolio2023',
-    database: 'flowtech',
-    entities: [Contacto, EstadoServicio, Inventario, NuestrosTrabajo, Servicio, Usuario, UsuarioAdmin],
-    // entities: [__dirname+"/**/*.entity{.ts,.js}"],//
-    synchronize: true,
-  }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'flowtech.ce8qbp7dz1bv.us-east-1.rds.amazonaws.com',
+      port: 3306,
+      username: 'admin',
+      password: 'portafolio2023',
+      database: 'flowtech',
+      entities: [
+        Contacto,
+        EstadoServicio,
+        Inventario,
+        NuestrosTrabajo,
+        Servicio,
+        Usuario,
+        UsuarioAdmin,
+        ServicioAgendado,
+      ],
+      // entities: [__dirname+"/**/*.entity{.ts,.js}"],//
+      synchronize: true,
+    }),
 
-  PruebaModule,
-  UsuarioModule,
-  UsuarioAdminModule,
-  ServicioModule,
-  NuestrosTrabajosModule,
-  EstadoServicioModule,
-  InventarioModule,
-  TypeOrmModule.forFeature([Usuario]),
-  JwtModule.register({
-    secret: 'secret',
-    signOptions: {expiresIn: '1d'}
-  }),
-    FormularioAgendarModule,
-  
-  controllers: [
-    AppController,
-    ServiciossController,
+    PruebaModule,
+    UsuarioModule,
+    UsuarioAdminModule,
+    ServicioModule,
+    NuestrosTrabajosModule,
+    EstadoServicioModule,
+    ServicioAgendadoModule,
+    ContactoModule,
+    InventarioModule,
+    TypeOrmModule.forFeature([Usuario]),
+    JwtModule.register({
+      secret: 'secret',
+      signOptions: { expiresIn: '1d' },
+    }),
   ],
+
+  controllers: [AppController, ServiciossController],
   providers: [AppService],
 })
 export class AppModule {}

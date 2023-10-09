@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class FormularioAgendar {
+export class ServicioAgendado {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()

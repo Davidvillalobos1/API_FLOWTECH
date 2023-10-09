@@ -8,5 +8,6 @@ import { Contacto } from './entities/contacto.entity';
   imports: [TypeOrmModule.forFeature([Contacto])],
   controllers: [ContactoController],
   providers: [ContactoService],
+  exports: [ContactoService],
 })
 export class ContactoModule {}

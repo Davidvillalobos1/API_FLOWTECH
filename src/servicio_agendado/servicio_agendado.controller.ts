@@ -1,14 +1,14 @@
 import { Controller, Post, Body } from '@nestjs/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { FormularioAgendarService } from './formulario_agendar.service';
+import { ServicioAgendadoService } from './servicio_agendado.service';
 
 @Controller()
-export class FormularioAgendarController {
+export class ServicioAgendadoController {
   constructor(
-    private readonly FormularioAgendarService: FormularioAgendarService,
+    private readonly ServicioAgendadoService: ServicioAgendadoService,
   ) {}
 
-  @Post('agendar')
+  @Post('servicio_agendado')
   async crearFormulario(
     @Body('comuna') comuna: string,
     @Body('direccion') direccion: string,
@@ -16,7 +16,7 @@ export class FormularioAgendarController {
     @Body('revision_tecnica') revision_tecnica: string,
   ): Promise<any> {
     try {
-      const agendado = await this.FormularioAgendarService.crearFormulario({
+      const agendado = await this.ServicioAgendadoService.crearAgenda({
         comuna,
         direccion,
         telefono,
