@@ -20,12 +20,11 @@ import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioAdmin } from './usuario_admin/entities/usuario_admin.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ServiciossController } from './servicioss/servicioss.controller';
-import { ContactoController } from './contacto/contacto.controller';
-import { ServicioAgendadoModule } from './servicio_agendado/servicio_agendado.module';
-import { ServicioAgendado } from './servicio_agendado/entities/servicio_agendado.entity';
 
 @Module({
+
   imports: [
+    ContactoModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'flowtech.ce8qbp7dz1bv.us-east-1.rds.amazonaws.com',
@@ -41,9 +40,8 @@ import { ServicioAgendado } from './servicio_agendado/entities/servicio_agendado
         Servicio,
         Usuario,
         UsuarioAdmin,
-        ServicioAgendado,
       ],
-      // entities: [__dirname+"/**/*.entity{.ts,.js}"],//
+      // entities: [__dirname+"/*/.entity{.ts,.js}"],//
       synchronize: true,
     }),
 
@@ -53,8 +51,6 @@ import { ServicioAgendado } from './servicio_agendado/entities/servicio_agendado
     ServicioModule,
     NuestrosTrabajosModule,
     EstadoServicioModule,
-    ServicioAgendadoModule,
-    ContactoModule,
     InventarioModule,
     TypeOrmModule.forFeature([Usuario]),
     JwtModule.register({

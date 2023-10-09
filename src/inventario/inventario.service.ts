@@ -48,15 +48,17 @@ export class InventarioService {
     return `This action returns all inventario`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} inventario`;
+  findOne(id: number) : Promise<Inventario> {
+    return  this.inventarioRepository.findOneById(id);
   }
 
   update(id: number, updateInventarioDto: UpdateInventarioDto) {
     return `This action updates a #${id} inventario`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} inventario`;
+ 
+
+  async delete(id: number): Promise<void> {
+    await this.inventarioRepository.delete(id);
   }
 }

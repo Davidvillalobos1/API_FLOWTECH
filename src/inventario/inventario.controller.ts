@@ -43,7 +43,7 @@ export class InventarioController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.inventarioService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.inventarioService.delete(+id);
   }
 }
