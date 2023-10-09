@@ -56,7 +56,9 @@ export class InventarioService {
     return `This action updates a #${id} inventario`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} inventario`;
+ 
+
+  async delete(id: number): Promise<void> {
+    await this.inventarioRepository.delete(id);
   }
 }
