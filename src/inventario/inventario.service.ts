@@ -53,8 +53,10 @@ export class InventarioService {
   }
 
   update(id: number, updateInventarioDto: UpdateInventarioDto) {
-    return `This action updates a #${id} inventario`;
+    return this.inventarioRepository.update(id, updateInventarioDto)
   }
+
+
 
  
 
