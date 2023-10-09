@@ -48,8 +48,8 @@ export class InventarioService {
     return `This action returns all inventario`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} inventario`;
+  findOne(id: number) : Promise<Inventario> {
+    return  this.inventarioRepository.findOneById(id);
   }
 
   update(id: number, updateInventarioDto: UpdateInventarioDto) {
