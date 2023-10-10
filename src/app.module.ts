@@ -20,6 +20,8 @@ import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioAdmin } from './usuario_admin/entities/usuario_admin.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ServiciossController } from './servicioss/servicioss.controller';
+import { ServicioAgendadoModule } from './servicio_agendado/servicio_agendado.module';
+import { ServicioAgendado } from './servicio_agendado/entities/servicio_agendado.entity';
 
 @Module({
 
@@ -40,6 +42,7 @@ import { ServiciossController } from './servicioss/servicioss.controller';
         Servicio,
         Usuario,
         UsuarioAdmin,
+        ServicioAgendado,
       ],
       // entities: [__dirname+"/*/.entity{.ts,.js}"],//
       synchronize: true,
@@ -51,6 +54,7 @@ import { ServiciossController } from './servicioss/servicioss.controller';
     ServicioModule,
     NuestrosTrabajosModule,
     EstadoServicioModule,
+    ServicioAgendadoModule,
     InventarioModule,
     TypeOrmModule.forFeature([Usuario]),
     JwtModule.register({
