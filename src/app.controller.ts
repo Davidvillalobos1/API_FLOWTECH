@@ -51,7 +51,7 @@ export class AppController {
       throw new BadRequestException('Credenciales inválidas');
     }
 
-    const jwt = await this.jwtService.signAsync({ id: usuario.id });
+    const jwt = await this.jwtService.signAsync({ id: usuario.id, email: usuario.email });
     response.cookie('jwt', jwt, { httpOnly: true });
 
     return {
@@ -61,28 +61,6 @@ export class AppController {
 }
 
 
-
-
-// @Get('user')
-// async user(@Req() request: Request) {
-//     try {
-//         const cookie = request.cookies['jwt'];
-
-//         const data = await this.jwtService.verifyAsync(cookie);
-
-//         if (!data) {
-//             throw new UnauthorizedException();
-//         }
-
-//         const user = await this.appService.findOne({id: data['id']});
-
-//         const {password, ...result} = user;
-
-//         return result;
-//     } catch (e) {
-//         throw new UnauthorizedException();
-//     }
-// }
 
   @Post('logout')
     async logout(@Res({passthrough: true}) response: Response) {
