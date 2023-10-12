@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-// import { CreateContactoDto } from './dto/create-contacto.dto';
-// import { UpdateContactoDto } from './dto/update-contacto.dto';
+
 import { InjectRepository } from '@nestjs/typeorm';
 import { Contacto } from './entities/contacto.entity';
 import { Repository } from 'typeorm';
@@ -46,39 +45,16 @@ export class ContactoService {
       console.error('Error al crear el contacto', error);
     }
   }
+
+  async getMensajes(): Promise<Contacto[]> {
+    try {
+      const mensajes = await this.contactoRepository.find(); // Esto obtiene todos los mensajes almacenados
+      return mensajes;
+    } catch (error) {
+      console.error('Error al obtener los mensajes', error);
+      throw error;
+    }
+  }
+
 }
 
-// constructor(
-//   @InjectRepository(Contacto)
-//   private readonly contactoRepository: Repository<Contacto>,
-// ) {}
-
-// async crearContacto(contactoData: Partial<Contacto>): Promise<Contacto> {
-//   try {
-//     const contacto = this.contactoRepository.create(contactoData);
-//     const nuevoContacto = await this.contactoRepository.save(contacto);
-//     return nuevoContacto;
-//   } catch (error) {
-//     console.error('Error al crear y guardar el contacto:', error);
-//     throw error; // Lanza el error para que se maneje globalmente
-//   }
-// }
-
-// create(createContactoDto: CreateContactoDto) {
-//   return 'This action adds a new contacto';
-// }
-// findAll() {
-//   return `This action returns all contacto`;
-// }
-
-// findOne(id: number) {
-//   return `This action returns a #${id} contacto`;
-// }
-
-// update(id: number, updateContactoDto: UpdateContactoDto) {
-//   return `This action updates a #${id} contacto`;
-// }
-
-// remove(id: number) {
-//   return `This action removes a #${id} contacto`;
-// }
