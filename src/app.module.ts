@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ContactoModule } from './contacto/contacto.module';
@@ -22,6 +22,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ServiciossController } from './servicioss/servicioss.controller';
 import { ServicioAgendadoModule } from './servicio_agendado/servicio_agendado.module';
 import { ServicioAgendado } from './servicio_agendado/entities/servicio_agendado.entity';
+import { AuthMiddleware } from './auth.meddleware';
 
 @Module({
 
@@ -66,4 +67,8 @@ import { ServicioAgendado } from './servicio_agendado/entities/servicio_agendado
   controllers: [AppController, ServiciossController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('servicio_agendado');
+  }
+}

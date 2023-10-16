@@ -1,8 +1,9 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Request } from '@nestjs/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ServicioAgendadoService } from './servicio_agendado.service';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
+// import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
+import { ServicioAgendado } from './entities/servicio_agendado.entity';
 
 @Controller()
 export class ServicioAgendadoController {
@@ -12,24 +13,30 @@ export class ServicioAgendadoController {
 
   @Post('servicio_agendado')
   async crearFormulario(
-    @Body('comuna') comuna: string,
-    @Body('direccion') direccion: string,
-    @Body('telefono') telefono: number,
-    @Body('revision_tecnica') revision_tecnica: string,
+    @Request() req,
+    @Body() body: ServicioAgendado,
   ): Promise<any> {
-    console.log('Datos recibidos: ', {
-      comuna,
-      direccion,
-      telefono,
-      revision_tecnica,
-    });
+    if (!req.user || !req.user.id) {
+      return {
+        message: 'Usuario no autenticado',
+      };
+    }
+
+    const usuarioId = req.user.id;
+
+    /**/
+    const nuevoAgendado = new ServicioAgendado();
+    nuevoAgendado.usuario = usuarioId;
+    nuevoAgendado.comuna = body.comuna;
+    nuevoAgendado.direccion = body.direccion;
+    nuevoAgendado.telefono = body.telefono;
+    nuevoAgendado.revision_tecnica = body.revision_tecnica;
+
+    /**/
+
     try {
-      const agendado = await this.ServicioAgendadoService.crearAgenda({
-        comuna,
-        direccion,
-        telefono,
-        revision_tecnica,
-      });
+      const agendado =
+        await this.ServicioAgendadoService.crearAgenda(nuevoAgendado);
       console.log('agendar: ', agendado);
       return {
         message: 'Formulario creado',
