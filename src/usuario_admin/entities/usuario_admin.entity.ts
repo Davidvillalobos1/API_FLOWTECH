@@ -6,14 +6,18 @@ import { Servicio } from "src/servicio/entities/servicio.entity"
 import { Usuario } from "src/usuario/entities/usuario.entity"
 import { Column, PrimaryGeneratedColumn, Entity, OneToMany, OneToOne } from "typeorm"
 
+
 @Entity()
 export class UsuarioAdmin {
     @PrimaryGeneratedColumn ()
-    id: number
+    id: number;
+
     @Column()
-    email_admin: string
+    email_admin: string;
+
     @Column()
-    contrasena_admin: string
+    contrasena_admin: string;
+
     @OneToMany (type => Contacto, contacto => contacto.usuarioadmin)
     contacto: Contacto[];
     @OneToMany (type => NuestrosTrabajo, nuestrostrabajo => nuestrostrabajo.usuarioadmin )

@@ -1,34 +1,44 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { UsuarioAdminService } from './usuario_admin.service';
 import { CreateUsuarioAdminDto } from './dto/create-usuario_admin.dto';
-import { UpdateUsuarioAdminDto } from './dto/update-usuario_admin.dto';
 
 @Controller('usuario-admin')
 export class UsuarioAdminController {
   constructor(private readonly usuarioAdminService: UsuarioAdminService) {}
 
-  @Post()
+  @Post('crear')
   create(@Body() createUsuarioAdminDto: CreateUsuarioAdminDto) {
     return this.usuarioAdminService.create(createUsuarioAdminDto);
   }
 
-  @Get()
+
+  @Post('login') // Ruta para iniciar sesión
+  async login(@Body() loginData: { email_admin: string; contrasena_admin: string }) {
+    try {
+      const usuario = await this.usuarioAdminService.findByEmail(loginData.email_admin);
+  
+      if (usuario) {
+        const isPasswordMatch = await this.usuarioAdminService.comparePasswords(
+          loginData.contrasena_admin,
+          usuario.contrasena_admin,
+        );
+  
+        if (isPasswordMatch) {
+          return { message: 'Usuario inició sesión correctamente' };
+        }
+      }
+  
+      return { message: 'Error de inicio de sesión. Verifica tus credenciales.' };
+    } catch (error) {
+      console.error('Error en la función login:', error);
+      // Puedes agregar un manejo de errores apropiado aquí, como devolver un mensaje de error específico.
+      return { message: 'Error en la función login. Por favor, inténtalo de nuevo.' };
+    }
+  
+  }
+
   findAll() {
     return this.usuarioAdminService.findAll();
   }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usuarioAdminService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUsuarioAdminDto: UpdateUsuarioAdminDto) {
-    return this.usuarioAdminService.update(+id, updateUsuarioAdminDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usuarioAdminService.remove(+id);
-  }
+  
 }

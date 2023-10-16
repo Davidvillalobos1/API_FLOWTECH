@@ -1,26 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUsuarioAdminDto } from './dto/create-usuario_admin.dto';
-import { UpdateUsuarioAdminDto } from './dto/update-usuario_admin.dto';
+import { UsuarioAdmin } from './entities/usuario_admin.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuarioAdminService {
-  create(createUsuarioAdminDto: CreateUsuarioAdminDto) {
-    return 'This action adds a new usuarioAdmin';
+  constructor(
+    @InjectRepository(UsuarioAdmin)
+    private readonly usuarioAdminRepository: Repository<UsuarioAdmin>,
+  ) {}
+
+  async create(createUsuarioAdminDto: CreateUsuarioAdminDto): Promise<UsuarioAdmin> {
+    const hashedPassword = await bcrypt.hash(createUsuarioAdminDto.contrasena_admin, 10);
+
+    const usuarioAdmin = this.usuarioAdminRepository.create({
+      email_admin: createUsuarioAdminDto.email_admin,
+      contrasena_admin: hashedPassword,
+    });
+
+    return await this.usuarioAdminRepository.save(usuarioAdmin);
+  }
+
+
+
+  async findByEmail(email_admin: string): Promise<UsuarioAdmin | undefined> {
+    return this.usuarioAdminRepository.findOne({ where: { email_admin } });
+  }
+
+  async comparePasswords(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
+    if (!plainTextPassword || !hashedPassword) {
+      // Manejar el caso en el que falta uno de los datos.
+      return false; // O lanzar un error si prefieres.
+    }
+  
+    return bcrypt.compare(plainTextPassword, hashedPassword);
   }
 
   findAll() {
     return `This action returns all usuarioAdmin`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} usuarioAdmin`;
-  }
-
-  update(id: number, updateUsuarioAdminDto: UpdateUsuarioAdminDto) {
-    return `This action updates a #${id} usuarioAdmin`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} usuarioAdmin`;
   }
 }
