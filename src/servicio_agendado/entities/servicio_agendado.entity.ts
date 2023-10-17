@@ -1,5 +1,11 @@
 import { type } from 'os';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Servicio } from 'src/servicio/entities/servicio.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 
@@ -17,9 +23,8 @@ export class ServicioAgendado {
   revision_tecnica: string;
   @ManyToOne(() => Servicio)
   @JoinColumn({ name: 'servicioId' })
-  servicio: any;
+  servicio: number;
   @ManyToOne(() => Usuario)
-  @JoinColumn({ name: 'usuarioId' })
-  usuario: any;
-
+  @JoinColumn({ name: 'email' })
+  usuario: string;
 }
