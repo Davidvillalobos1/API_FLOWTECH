@@ -12,7 +12,7 @@ export class ServicioAgendadoService {
     return this.usuarioService.findOneByEmail(email);
   }
   
-  
+
 
   constructor(
     @InjectRepository(ServicioAgendado)
@@ -23,7 +23,7 @@ export class ServicioAgendadoService {
     ServicioAgendadoData: Partial<ServicioAgendado>,
   ): Promise<ServicioAgendado> {
     try {
-      // const email = await this.buscarEmail(ServicioAgendadoData.usuario.email);
+      console.log(ServicioAgendadoData);
       const agenda =
         this.ServicioAgendadoRepository.create(ServicioAgendadoData);
       const nuevaAgenda = await this.ServicioAgendadoRepository.save(agenda);
