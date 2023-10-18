@@ -1,6 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ServicioAgendadoService } from './servicio_agendado.service';
+import { ServicioAgendado } from './entities/servicio_agendado.entity';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 // import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
 
@@ -11,18 +12,8 @@ export class ServicioAgendadoController {
   ) {}
 
   @Post('servicio_agendado')
-  async crearFormulario(
-    @Body('comuna') comuna: string,
-    @Body('direccion') direccion: string,
-    @Body('telefono') telefono: number,
-    @Body('revision_tecnica') revision_tecnica: string,
-  ): Promise<any> {
-    const agendado = await this.ServicioAgendadoService.crearAgenda({
-      comuna,
-      direccion,
-      telefono,
-      revision_tecnica,
-    });
+  async crearFormulario(@Body() data: ServicioAgendado): Promise<any> {
+    const agendado = await this.ServicioAgendadoService.crearAgenda(data);
 
     try {
       return {

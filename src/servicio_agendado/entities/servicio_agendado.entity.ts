@@ -21,10 +21,11 @@ export class ServicioAgendado {
   telefono: number;
   @Column()
   revision_tecnica: string;
-  @ManyToOne(() => Servicio)
-  @JoinColumn({ name: 'servicioId' })
-  servicio: number;
-  @ManyToOne(() => Usuario)
-  @JoinColumn({ name: 'email' })
-  usuario: string;
+  @ManyToOne(() => Servicio, { eager: true }) 
+  @JoinColumn({ name: 'servicioId' }) 
+  servicio: Servicio; 
+
+  @ManyToOne(() => Usuario, { eager: true }) 
+  @JoinColumn({ name: 'email' }) 
+  usuario: Usuario; 
 }

@@ -15,9 +15,7 @@ export class ServicioAgendadoService {
     try {
       const agenda =
         this.ServicioAgendadoRepository.create(ServicioAgendadoData);
-      console.log('Se agenda?', agenda);
       const nuevaAgenda = await this.ServicioAgendadoRepository.save(agenda);
-      console.log('Se agendo?', nuevaAgenda);
       return nuevaAgenda;
     } catch (error) {
       console.error('Error al crear una agenda', error);
