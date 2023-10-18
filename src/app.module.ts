@@ -65,5 +65,6 @@ import { ServicioAgendado } from './servicio_agendado/entities/servicio_agendado
 
   controllers: [AppController, ServiciossController],
   providers: [AppService],
+  exports: [AppService]
 })
 export class AppModule {}
