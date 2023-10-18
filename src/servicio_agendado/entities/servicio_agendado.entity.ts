@@ -26,6 +26,6 @@ export class ServicioAgendado {
   servicio: Servicio; 
 
   @ManyToOne(() => Usuario, { eager: true }) 
-  @JoinColumn({ name: 'email' }) 
+  @JoinColumn({ name: 'usuarioId' }) 
   usuario: Usuario; 
 }
