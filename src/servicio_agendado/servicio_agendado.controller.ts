@@ -19,6 +19,13 @@ export class ServicioAgendadoController {
   }
 
 
+  @Get('')
+  traerTodos(): Promise<ServicioAgendado[]> {
+    return this.ServicioAgendadoService.traerTodos();
+  }
+
+
+
   @Post('')
   async crearFormulario(@Body() data: CreateServicioAgendadoDto): Promise<any> {
     const agendado = await this.ServicioAgendadoService.crearAgenda(data);

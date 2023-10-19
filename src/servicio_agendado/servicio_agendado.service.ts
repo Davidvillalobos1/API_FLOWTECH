@@ -25,6 +25,19 @@ export class ServicioAgendadoService {
 
   ) {}
 
+
+  async traerTodos(): Promise<ServicioAgendado[]> {
+    try {
+      const agendas = await this.ServicioAgendadoRepository.find();
+      return agendas;
+    } catch (error) {
+      console.error('Error al traer todos los agendas', error);
+      throw new Error('Error');
+    }
+  }
+
+
+
   async traerporId(id: number): Promise<ServicioAgendado> {
     try {
       const agenda = await this.ServicioAgendadoRepository.findOne({where: {id: id}});
