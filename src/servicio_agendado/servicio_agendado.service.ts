@@ -6,7 +6,7 @@ import { UsuarioService } from 'src/usuario/usuario.service';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { Servicio } from 'src/servicio/entities/servicio.entity';
 import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
-
+import { ServicioService } from 'src/servicio/servicio.service';
 
 @Injectable()
 export class ServicioAgendadoService {
@@ -22,6 +22,8 @@ export class ServicioAgendadoService {
 
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
+
+    
 
   ) {}
 
@@ -48,15 +50,22 @@ export class ServicioAgendadoService {
     }
   }
 
-  async crearAgenda(
-    ServicioAgendadoData: CreateServicioAgendadoDto,
-  ): Promise<ServicioAgendado> {
+ 
+ 
+
+  async crearAgenda(ServicioAgendadoData: CreateServicioAgendadoDto): Promise<ServicioAgendado> {
     try {
       console.log(ServicioAgendadoData);
-      const usuario = await this.usuarioRepository.findOne({where: {email: ServicioAgendadoData.email}})
-      const servicio = await this.servicioRepository.findOne({where: {id: ServicioAgendadoData.servicio}})
-      const agenda =
-        this.ServicioAgendadoRepository.create({comuna: ServicioAgendadoData.comuna, direccion: ServicioAgendadoData.direccion, telefono: ServicioAgendadoData.telefono, revision_tecnica: ServicioAgendadoData.revision_tecnica, servicio: servicio, usuario: usuario});
+      const usuario = await this.usuarioRepository.findOne({ where: { email: ServicioAgendadoData.email } });
+      const servicio = await this.servicioRepository.findOne({ where: { id: ServicioAgendadoData.servicioId } }); // Utiliza el servicioId proporcionado en lugar de ServicioAgendadoData.servicio
+      const agenda = this.ServicioAgendadoRepository.create({
+        comuna: ServicioAgendadoData.comuna,
+        direccion: ServicioAgendadoData.direccion,
+        telefono: ServicioAgendadoData.telefono,
+        revision_tecnica: ServicioAgendadoData.revision_tecnica,
+        servicio: servicio,
+        usuario: usuario,
+      });
       const nuevaAgenda = await this.ServicioAgendadoRepository.save(agenda);
       return nuevaAgenda;
     } catch (error) {
@@ -64,7 +73,9 @@ export class ServicioAgendadoService {
       throw new Error('Error');
     }
   }
- 
+  
+  
+  
 
 
 }

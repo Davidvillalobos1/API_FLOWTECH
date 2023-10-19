@@ -26,8 +26,10 @@ export class ServicioAgendadoController {
 
 
 
-  @Post('')
-  async crearFormulario(@Body() data: CreateServicioAgendadoDto): Promise<any> {
+  @Post('') 
+  async crearFormulario(
+    @Body() data: CreateServicioAgendadoDto,
+  ): Promise<any> {
     const agendado = await this.ServicioAgendadoService.crearAgenda(data);
 
     try {
@@ -39,4 +41,5 @@ export class ServicioAgendadoController {
       console.error('Error al crear agendado', error);
     }
   }
+
 }

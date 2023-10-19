@@ -3,6 +3,6 @@ export class CreateServicioAgendadoDto{
     direccion : string;
     email : string;
     revision_tecnica : string;
-    servicio : any;
+    servicioId : number;
     telefono : number;
 }
