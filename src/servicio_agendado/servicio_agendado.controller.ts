@@ -1,10 +1,7 @@
 import { Controller, Post, Body, Get, Param } from '@nestjs/common';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { ServicioAgendadoService } from './servicio_agendado.service';
 import { ServicioAgendado } from './entities/servicio_agendado.entity';
 import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
 
 @Controller('servicio_agendado')
 export class ServicioAgendadoController {
@@ -26,12 +23,19 @@ export class ServicioAgendadoController {
 
 
 
+@Get('usuario/:email')
+traerPorCorreoUsuario(@Param('email') email: string): Promise<ServicioAgendado[]> {
+  return this.ServicioAgendadoService.traerPorCorreoUsuario(email);
+}
+
+
   @Post('') 
   async crearFormulario(
     @Body() data: CreateServicioAgendadoDto,
   ): Promise<any> {
     const agendado = await this.ServicioAgendadoService.crearAgenda(data);
 
+    
     try {
       return {
         message: 'Formulario creado',

@@ -2,18 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { ServicioAgendado } from './entities/servicio_agendado.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UsuarioService } from 'src/usuario/usuario.service';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { Servicio } from 'src/servicio/entities/servicio.entity';
 import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
-import { ServicioService } from 'src/servicio/servicio.service';
+
 
 @Injectable()
 export class ServicioAgendadoService {
-
-
   constructor(
-    
     @InjectRepository(ServicioAgendado)
     private readonly ServicioAgendadoRepository: Repository<ServicioAgendado>,
 
@@ -28,6 +24,17 @@ export class ServicioAgendadoService {
   ) {}
 
 
+  async traerPorCorreoUsuario(email: string): Promise<ServicioAgendado[]> {
+    try {
+      const usuario = await this.usuarioRepository.findOne({ where: { email } });
+      const agendas = await this.ServicioAgendadoRepository.find({ where: { usuario } });
+      return agendas;
+    } catch (error) {
+      console.error('Error al traer los servicios agendados por correo de usuario', error);
+      throw new Error('Error');
+    }
+  }
+
   async traerTodos(): Promise<ServicioAgendado[]> {
     try {
       const agendas = await this.ServicioAgendadoRepository.find();
@@ -38,8 +45,6 @@ export class ServicioAgendadoService {
     }
   }
 
-
-
   async traerporId(id: number): Promise<ServicioAgendado> {
     try {
       const agenda = await this.ServicioAgendadoRepository.findOne({where: {id: id}});
@@ -49,9 +54,6 @@ export class ServicioAgendadoService {
       throw new Error('Error');
     }
   }
-
- 
- 
 
   async crearAgenda(ServicioAgendadoData: CreateServicioAgendadoDto): Promise<ServicioAgendado> {
     try {
@@ -73,10 +75,5 @@ export class ServicioAgendadoService {
       throw new Error('Error');
     }
   }
-  
-  
-  
-
-
 }
 
