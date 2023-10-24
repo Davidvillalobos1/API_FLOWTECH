@@ -1,6 +1,6 @@
 import { Servicio } from "src/servicio/entities/servicio.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
-
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { ServicioAgendado } from "src/servicio_agendado/entities/servicio_agendado.entity";
 @Entity()
 export class EstadoServicio {
 
@@ -8,8 +8,8 @@ export class EstadoServicio {
     id: number
     @Column ()
     estado_servicio: string
-    @ManyToOne(type => Servicio, servicio => servicio.estadoservicio)
-    servicio: EstadoServicio;
+    @OneToMany(type => ServicioAgendado, servicioagendado => servicioagendado.estadoservicio)
+    servicioagendado:ServicioAgendado;
 
 
 

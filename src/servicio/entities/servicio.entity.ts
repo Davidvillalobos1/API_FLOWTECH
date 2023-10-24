@@ -28,8 +28,7 @@ export class Servicio {
 
     @ManyToOne (type => UsuarioAdmin, usuarioadmin => usuarioadmin.servicio)
     usuarioadmin: UsuarioAdmin;
-    @OneToMany (type => EstadoServicio, estadoservicio => estadoservicio.servicio)
-    estadoservicio: EstadoServicio[];
+    
     @OneToMany(type => Usuario, usuario => usuario.servicio)
     usuario: Usuario;
 }

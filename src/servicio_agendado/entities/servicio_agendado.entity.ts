@@ -4,10 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Servicio } from 'src/servicio/entities/servicio.entity';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
+import { EstadoServicio } from 'src/estado_servicio/entities/estado_servicio.entity';
 
 @Entity()
 export class ServicioAgendado {
@@ -28,4 +30,7 @@ export class ServicioAgendado {
   @ManyToOne(() => Usuario, { eager: true }) 
   @JoinColumn({ name: 'usuarioId' }) 
   usuario: Usuario; 
+
+  @ManyToOne (type => EstadoServicio, estadoservicio => estadoservicio.servicioagendado)
+  estadoservicio: EstadoServicio;
 }
