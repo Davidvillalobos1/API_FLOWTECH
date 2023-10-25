@@ -47,15 +47,19 @@ traerPorCorreoUsuario(@Param('email') email: string): Promise<ServicioAgendado[]
   }
 
   @Post('agendar-y-pagar')
-  async agendarYPagar(@Body() data: CreateServicioAgendadoDto, @Res() res: Response): Promise<any> {
-    // Llama a tu servicio para crear el agendamiento
-    const agendado = await this.ServicioAgendadoService.crearAgenda(data);
+async agendarYPagar(@Body() data: CreateServicioAgendadoDto, @Res() res: Response): Promise<any> {
+  // Llama a tu servicio para crear el agendamiento
+  const agendado = await this.ServicioAgendadoService.crearAgenda(data);
 
-    // Luego, llama a la ruta de Mercado Pago para crear la preferencia y redirigir al usuario
-    const mercadoPagoUrl = 'https://tu-backend/mercado-pago/crear-preferencia'; // Reemplaza con la URL correcta
+  // Obtiene el servicioId de los datos enviados en la solicitud
+  const servicioId = data.servicioId;
 
-    // Redirige al usuario con los datos necesarios
-    res.redirect(`${mercadoPagoUrl}?servicioId=${agendado.servicio.id}`);
-  }
+  // Luego, llama a la ruta de Mercado Pago para crear la preferencia y redirigir al usuario
+  const mercadoPagoUrl = 'https://api-flowtech.onrender.com/mercado-pago/crear-preferencia'; // Reemplaza con la URL correcta
+
+  // Redirige al usuario con los datos necesarios
+  res.redirect(`${mercadoPagoUrl}?servicioId=${servicioId}`);
+}
+
 
 }
