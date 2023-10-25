@@ -23,14 +23,16 @@ export class ServicioAgendado {
   telefono: number;
   @Column()
   revision_tecnica: string;
-  @ManyToOne(() => Servicio, { eager: true }) 
-  @JoinColumn({ name: 'servicioId' }) 
-  servicio: Servicio; 
+  @ManyToOne(() => Servicio, { eager: true })
+  @JoinColumn({ name: 'servicioId' })
+  servicio: Servicio;
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  CreatedAt: Date
 
-  @ManyToOne(() => Usuario, { eager: true }) 
-  @JoinColumn({ name: 'usuarioId' }) 
-  usuario: Usuario; 
+  @ManyToOne(() => Usuario, { eager: true })
+  @JoinColumn({ name: 'usuarioId' })
+  usuario: Usuario;
 
-  @ManyToOne (type => EstadoServicio, estadoservicio => estadoservicio.servicioagendado)
+  @ManyToOne(type => EstadoServicio, estadoservicio => estadoservicio.servicioagendado)
   estadoservicio: EstadoServicio;
 }
