@@ -1,28 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
+import { FindOneOptions, Repository } from 'typeorm';
+import { Servicio } from 'src/servicio/entities/servicio.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ServicioDto } from 'src/servicio/dto/servicio.dto';
 
 @Injectable()
 export class MercadoPagoService {
-  constructor() {}
+  constructor(
+    @InjectRepository(Servicio)
+    private readonly servicioRepository: Repository<Servicio>,
+  ) {}
 
-  async obtenerPrecioServicio(servicioId: number): Promise<number> {
-    // Aquí, realiza la lógica necesaria para obtener el precio del servicio
-    // Utiliza el servicioId para buscar el precio en tu base de datos o donde lo tengas almacenado
-    // Retorna el precio del servicio
-    // Ejemplo:
-    const precio = 100; // Supongamos que obtienes el precio del servicio de alguna fuente de datos
-    return precio;
+  async obtenerPrecioServicio(servicioDto: ServicioDto): Promise<{ nombre: string; precio: number; imagen: string }> {
+    const { nombre_servicio, foto_servicio } = servicioDto;
+    try {
+      const options: FindOneOptions<Servicio> = {
+        where: { nombre_servicio, foto_servicio },
+        select: ['nombre_servicio', 'precio_servicio', 'foto_servicio'],
+      };
+      const servicio = await this.servicioRepository.findOne(options);
+      if (servicio) {
+        return {
+          nombre: servicio.nombre_servicio,
+          precio: servicio.precio_servicio,
+          imagen: servicio.foto_servicio, 
+        };
+      } else {
+        throw new Error('No se encontró el servicio');
+      }
+    } catch (error) {
+      console.error('Error al obtener los datos del servicio: ', error);
+      throw new Error('Error');
+    }
   }
 
-  async crearPreferenciaPago(precio: number): Promise<string> {
-    // Aquí, realiza la llamada a la API de Mercado Pago para crear la preferencia de pago
-    const mercadoPagoUrl = 'https://api.mercadopago.com/checkout/preferences';
+  async crearPreferenciaPago(servicioInfo: { nombre: string; precio: number; imagen: string }): Promise<string> {
+    const mercadoPagoUrl =
+      'https://api.mercadopago.com/checkout/preferences?access_token=TEST-3284379278811046-101115-7c09ad700aea3d7e90fbab6658cadd26-331616373';
     const preference = {
       items: [
         {
-          title: 'Producto',
-          unit_price: precio,
+          title: servicioInfo.nombre,
+          unit_price: servicioInfo.precio,
           quantity: 1,
+          picture_url: servicioInfo.imagen,
         },
       ],
       auto_return: 'approved',
@@ -37,18 +59,18 @@ export class MercadoPagoService {
       const response = await axios.post(mercadoPagoUrl, preference, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer TEST-3284379278811046-101115-7c09ad700aea3d7e90fbab6658cadd26-331616373', // Reemplaza con tu token de Mercado Pago
         },
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         return response.data.init_point;
       } else {
+        console.log(response);
         throw new Error('Error al crear la preferencia de pago');
       }
     } catch (error) {
+      console.error(error);
       throw new Error('Error al conectar con Mercado Pago');
     }
   }
 }
-

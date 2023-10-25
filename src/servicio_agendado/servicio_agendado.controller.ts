@@ -3,7 +3,7 @@ import { ServicioAgendadoService } from './servicio_agendado.service';
 import { ServicioAgendado } from './entities/servicio_agendado.entity';
 import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
 import { Response } from 'express';
-
+import { MercadoPagoService } from 'src/mercadopago/mercadopago.service';
 
 @Controller('servicio_agendado')
 export class ServicioAgendadoController {
@@ -50,16 +50,17 @@ export class ServicioAgendadoController {
 
   @Post('agendar-y-pagar')
   async agendarYPagar(@Body() data: CreateServicioAgendadoDto, @Res() res: Response): Promise<any> {
-    // Llama a tu servicio para crear el agendamiento
+  
     const agendado = await this.ServicioAgendadoService.crearAgenda(data);
 
-    // Luego, llama a la ruta de Mercado Pago para crear la preferencia y redirigir al usuario
-    const servicioId = data.servicioId; // Obtiene el servicioId de los datos enviados en la solicitud
 
-    // Redirige al usuario a la URL de Mercado Pago
-    res.redirect(`https://api-flowtech.onrender.com/mercado-pago/crear-preferencia?servicioId=${servicioId}`);
+    const servicioId = data.servicioId;
+
+ 
+    res.redirect(`http://localhost:3000//mercado-pago/crear-preferencia?servicioId=${servicioId}`);
   }
-  
+
+
 
 
 }

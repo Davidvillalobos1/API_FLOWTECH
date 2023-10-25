@@ -1,5 +1,5 @@
 import { Controller, Post, Body, Res } from '@nestjs/common';
-import { Response } from 'express'; // Asegúrate de que esta importación sea correcta
+import { Response } from 'express';
 import { MercadoPagoService } from './mercadopago.service';
 
 @Controller('mercado-pago')
@@ -7,15 +7,19 @@ export class MercadoPagoController {
   constructor(private readonly mercadoPagoService: MercadoPagoService) {}
 
   @Post('crear-preferencia')
-  async crearPreferenciaPago(@Body() data: any, @Res() res: Response): Promise<any> {
+  async crearPreferenciaPago(@Body() data: any): Promise<any> {
     try {
-      const precioServicio = await this.mercadoPagoService.obtenerPrecioServicio(data.servicioId);
+      const { servicioId } = data;
+      const servicioInfo = await this.mercadoPagoService.obtenerPrecioServicio(servicioId);
 
-      // Llama al servicio de Mercado Pago para crear la preferencia
-      const initPoint = await this.mercadoPagoService.crearPreferenciaPago(precioServicio);
+   
+      const initPoint = await this.mercadoPagoService.crearPreferenciaPago(servicioInfo);
 
-      // Redirige al usuario al sitio de pago de Mercado Pago
-      res.redirect(initPoint);
+      console.log('Link de Mercado Pago:', initPoint); 
+
+      return {
+        initPoint,
+      };
     } catch (error) {
       console.error('Error al crear la preferencia de pago en Mercado Pago: ', error);
       throw new Error('Error');
