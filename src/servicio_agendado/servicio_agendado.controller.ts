@@ -1,8 +1,8 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Res } from '@nestjs/common';
 import { ServicioAgendadoService } from './servicio_agendado.service';
 import { ServicioAgendado } from './entities/servicio_agendado.entity';
 import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
-
+import { Response } from 'express';
 @Controller('servicio_agendado')
 export class ServicioAgendadoController {
   constructor(
@@ -44,6 +44,18 @@ traerPorCorreoUsuario(@Param('email') email: string): Promise<ServicioAgendado[]
     } catch (error) {
       console.error('Error al crear agendado', error);
     }
+  }
+
+  @Post('agendar-y-pagar')
+  async agendarYPagar(@Body() data: CreateServicioAgendadoDto, @Res() res: Response): Promise<any> {
+    // Llama a tu servicio para crear el agendamiento
+    const agendado = await this.ServicioAgendadoService.crearAgenda(data);
+
+    // Luego, llama a la ruta de Mercado Pago para crear la preferencia y redirigir al usuario
+    const mercadoPagoUrl = 'https://tu-backend/mercado-pago/crear-preferencia'; // Reemplaza con la URL correcta
+
+    // Redirige al usuario con los datos necesarios
+    res.redirect(`${mercadoPagoUrl}?servicioId=${agendado.servicio.id}`);
   }
 
 }
