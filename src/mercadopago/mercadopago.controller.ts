@@ -10,11 +10,9 @@ export class MercadoPagoController {
   async crearPreferenciaPago(@Body() data: any): Promise<any> {
     try {
       const { servicioId } = data;
-      const servicioInfo = await this.mercadoPagoService.obtenerPrecioServicio(servicioId);
 
-   
-      const initPoint = await this.mercadoPagoService.crearPreferenciaPago(servicioInfo);
-
+      const initPoint = await this.mercadoPagoService.crearPreferenciaPago(servicioId);
+      
       console.log('Link de Mercado Pago:', initPoint); 
 
       return {

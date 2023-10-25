@@ -14,6 +14,7 @@ export class MercadoPagoService {
 
   async obtenerPrecioServicio(servicioDto: ServicioDto): Promise<{ nombre: string; precio: number; imagen: string }> {
     const { nombre_servicio, foto_servicio } = servicioDto;
+    console.log
     try {
       const options: FindOneOptions<Servicio> = {
         where: { nombre_servicio, foto_servicio },
@@ -35,16 +36,18 @@ export class MercadoPagoService {
     }
   }
 
-  async crearPreferenciaPago(servicioInfo: { nombre: string; precio: number; imagen: string }): Promise<string> {
+  async crearPreferenciaPago(servicioId: number ): Promise<string> {
+   
+    const servicio = await this.servicioRepository.findOne({where: {id: servicioId}})
     const mercadoPagoUrl =
       'https://api.mercadopago.com/checkout/preferences?access_token=TEST-3284379278811046-101115-7c09ad700aea3d7e90fbab6658cadd26-331616373';
     const preference = {
       items: [
         {
-          title: servicioInfo.nombre,
-          unit_price: servicioInfo.precio,
+          title: servicio.nombre_servicio,
+          unit_price: servicio.precio_servicio,
           quantity: 1,
-          picture_url: servicioInfo.imagen,
+          picture_url: servicio.foto_servicio,
         },
       ],
       auto_return: 'approved',

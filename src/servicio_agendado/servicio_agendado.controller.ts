@@ -37,7 +37,6 @@ export class ServicioAgendadoController {
   ): Promise<any> {
     const agendado = await this.ServicioAgendadoService.crearAgenda(data);
 
-
     try {
       return {
         message: 'Formulario creado',
