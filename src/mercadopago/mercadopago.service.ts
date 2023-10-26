@@ -4,26 +4,13 @@ import { FindOneOptions, Repository } from 'typeorm';
 import { Servicio } from 'src/servicio/entities/servicio.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ServicioDto } from 'src/servicio/dto/servicio.dto';
-import { ServicioAgendado } from 'src/servicio_agendado/entities/servicio_agendado.entity';
-
-
-
-
-
-
 
 @Injectable()
 export class MercadoPagoService {
-
-  @InjectRepository(ServicioAgendado)
-  private readonly ServicioAgendadoRepository: Repository<ServicioAgendado>
-
-
-
   constructor(
     @InjectRepository(Servicio)
     private readonly servicioRepository: Repository<Servicio>,
-  ) { }
+  ) {}
 
   async obtenerPrecioServicio(servicioDto: ServicioDto): Promise<{ nombre: string; precio: number; imagen: string }> {
     const { nombre_servicio, foto_servicio } = servicioDto;
@@ -38,7 +25,7 @@ export class MercadoPagoService {
         return {
           nombre: servicio.nombre_servicio,
           precio: servicio.precio_servicio,
-          imagen: servicio.foto_servicio,
+          imagen: servicio.foto_servicio, 
         };
       } else {
         throw new Error('No se encontró el servicio');
@@ -49,9 +36,9 @@ export class MercadoPagoService {
     }
   }
 
-  async crearPreferenciaPago(servicioId: number): Promise<string> {
-
-    const servicio = await this.servicioRepository.findOne({ where: { id: servicioId } })
+  async crearPreferenciaPago(servicioId: number ): Promise<string> {
+   
+    const servicio = await this.servicioRepository.findOne({where: {id: servicioId}})
     const mercadoPagoUrl =
       'https://api.mercadopago.com/checkout/preferences?access_token=TEST-3284379278811046-101115-7c09ad700aea3d7e90fbab6658cadd26-331616373';
     const preference = {
@@ -89,7 +76,4 @@ export class MercadoPagoService {
       throw new Error('Error al conectar con Mercado Pago');
     }
   }
-
-
-
 }
