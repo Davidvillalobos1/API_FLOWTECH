@@ -5,6 +5,22 @@ import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
 import { Response } from 'express';
 import { MercadoPagoService } from 'src/mercadopago/mercadopago.service';
 
+@Controller('pagos')
+export class PagosController {
+  constructor(private readonly servicioAgendadoService: ServicioAgendadoService) {}
+
+  @Post('confirmar-pago')
+  async confirmarPago(@Body() data: any) {
+    if (data.pagoExitoso) {
+      // Crea un servicio agendado con los datos proporcionados
+      const nuevoAgendado = await this.servicioAgendadoService.crearAgenda(data);
+      
+      // Devuelve una respuesta apropiada al frontend
+      return { mensaje: 'Pago confirmado y servicio agendado', agendado: nuevoAgendado };
+    }
+  }
+}
+
 @Controller('servicio_agendado')
 export class ServicioAgendadoController {
   constructor(
@@ -75,6 +91,7 @@ export class ServicioAgendadoController {
       console.error('Error al procesar el pago exitoso', error);
     }
   }
+  
 
 
 
