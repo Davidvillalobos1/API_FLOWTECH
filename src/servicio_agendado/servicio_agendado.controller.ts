@@ -49,17 +49,36 @@ export class ServicioAgendadoController {
 
   @Post('agendar-y-pagar')
   async agendarYPagar(@Body() data: CreateServicioAgendadoDto, @Res() res: Response): Promise<any> {
-  
-    const agendado = await this.ServicioAgendadoService.crearAgenda(data);
-
-
+    // Crea la preferencia de pago en MercadoPago y obtén la URL de pago
     const servicioId = data.servicioId;
 
- 
-    res.redirect(`http://localhost:3000//mercado-pago/crear-preferencia?servicioId=${servicioId}`);
+    // Redirige al usuario a la URL de MercadoPago
+    res.redirect(`https://api.mercadopago.com/checkout/preferences?access_token=TEST-3284379278811046-101115-7c09ad700aea3d7e90fbab6658cadd26-331616373?servicioId=${servicioId}`);
+  }
+
+  @Post('pago-exitoso')
+  async pagoExitoso(@Body() data: any): Promise<any> {
+    try {
+      // Verifica que el pago sea exitoso y obtén la información del servicio
+      const servicioId = data.servicioId;
+
+      // Aquí puedes realizar más validaciones y procesar el pago si es necesario
+
+      // Crea el registro del servicio agendado
+      const agendado = await this.ServicioAgendadoService.crearAgenda(data);
+
+      return {
+        message: 'Pago exitoso y formulario creado',
+        data: agendado,
+      };
+    } catch (error) {
+      console.error('Error al procesar el pago exitoso', error);
+    }
   }
 
 
+
+  
 
 
 }
