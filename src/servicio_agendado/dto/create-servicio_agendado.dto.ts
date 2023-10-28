@@ -5,4 +5,5 @@ export class CreateServicioAgendadoDto{
     revision_tecnica : string;
     servicioId : number;
     telefono : number;
+    estado_servicio: string;
 }

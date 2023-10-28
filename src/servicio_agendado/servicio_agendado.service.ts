@@ -60,13 +60,16 @@ export class ServicioAgendadoService {
       console.log(ServicioAgendadoData);
       const usuario = await this.usuarioRepository.findOne({ where: { email: ServicioAgendadoData.email } });
       const servicio = await this.servicioRepository.findOne({ where: { id: ServicioAgendadoData.servicioId } }); // Utiliza el servicioId proporcionado en lugar de ServicioAgendadoData.servicio
+      ServicioAgendadoData.estado_servicio = 'no';
       const agenda = this.ServicioAgendadoRepository.create({
+        
         comuna: ServicioAgendadoData.comuna,
         direccion: ServicioAgendadoData.direccion,
         telefono: ServicioAgendadoData.telefono,
         revision_tecnica: ServicioAgendadoData.revision_tecnica,
         servicio: servicio,
         usuario: usuario,
+        
       });
       const nuevaAgenda = await this.ServicioAgendadoRepository.save(agenda);
       return nuevaAgenda;
