@@ -11,28 +11,34 @@ export class UsuarioController {
     private readonly usuarioService: UsuarioService,
     private jwtService: JwtService) { }
 
-  @Post('Registrarse')
-  async register(
-    @Body('nombre') nombre: string,
-    @Body('apellido') apellido: string,
-    @Body('email') email: string,
-    @Body('contrasena') contrasena: string
-  ) {
-    const hashedPassword = await bcrypt.hash(contrasena, 12);
-
-    const user = await this.usuarioService.create({
-      nombre,
-      apellido,
-      email,
-      contrasena: hashedPassword
-    });
-
-    const jwt = await this.jwtService.signAsync({ id: user.id });
-    return {
-      message: 'Usuario registrado exitosamente',
-      token: jwt,
-    };
-  }
+    @Post('registrarse')
+    async register(
+      @Body('nombre') nombre: string,
+      @Body('apellido') apellido: string,
+      @Body('email') email: string,
+      @Body('contrasena') contrasena: string
+    ) {
+      const hashedPassword = await bcrypt.hash(contrasena, 12);
+  
+      
+      const existingUser = await this.usuarioService.findOneByEmail(email);
+      if (existingUser) {
+        throw new BadRequestException('El correo electrónico ya está registrado');
+      }
+  
+      const user = await this.usuarioService.create({
+        nombre,
+        apellido,
+        email,
+        contrasena: hashedPassword
+      });
+  
+      const jwt = await this.jwtService.signAsync({ id: user.id });
+      return {
+        message: 'Usuario registrado exitosamente',
+        token: jwt,
+      };
+    }
   @Post('login')
   async login(
     @Body('email') email: string,
