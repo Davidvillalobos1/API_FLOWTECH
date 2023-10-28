@@ -52,9 +52,9 @@ export class MercadoPagoService {
       ],
       auto_return: 'approved',
       back_urls: {
-        success: 'https://netlify--flowtechh.netlify.app/success',
-        failure: 'https://netlify--flowtechh.netlify.app/servicios',
-        pending: 'https://netlify--flowtechh.netlify.app',
+        success: 'https://flowtechh.netlify.app/success',
+        failure: 'https://flowtechh.netlify.app/servicios',
+        pending: 'https://flowtechh.netlify.app',
       },
     };
 
