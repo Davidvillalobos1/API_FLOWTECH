@@ -78,5 +78,26 @@ export class ServicioAgendadoService {
       throw new Error('Error');
     }
   }
+  
+
+  
+
+  async modificarEstadoServicio(id: number): Promise<ServicioAgendado> {
+    try {
+      const agenda = await this.ServicioAgendadoRepository.findOne({ where: { id } });
+  
+      if (!agenda) {
+        throw new Error('Agenda no encontrada');
+      }
+  
+      agenda.estado_servicio = 'SI TERMINADO'; 
+      const agendaActualizada = await this.ServicioAgendadoRepository.save(agenda);
+  
+      return agendaActualizada;
+    } catch (error) {
+      console.error('Error al modificar el estado del servicio', error);
+      throw new Error('Error');
+    }
+}
 }
 

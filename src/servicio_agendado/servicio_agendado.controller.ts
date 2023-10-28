@@ -65,22 +65,21 @@ export class ServicioAgendadoController {
 
   @Post('agendar-y-pagar')
   async agendarYPagar(@Body() data: CreateServicioAgendadoDto, @Res() res: Response): Promise<any> {
-    // Crea la preferencia de pago en MercadoPago y obtén la URL de pago
+    
     const servicioId = data.servicioId;
 
-    // Redirige al usuario a la URL de MercadoPago
+    
     res.redirect(`https://api.mercadopago.com/checkout/preferences?access_token=TEST-3284379278811046-101115-7c09ad700aea3d7e90fbab6658cadd26-331616373?servicioId=${servicioId}`);
   }
 
   @Post('pago-exitoso')
   async pagoExitoso(@Body() data: any): Promise<any> {
     try {
-      // Verifica que el pago sea exitoso y obtén la información del servicio
+      
       const servicioId = data.servicioId;
 
-      // Aquí puedes realizar más validaciones y procesar el pago si es necesario
+   
 
-      // Crea el registro del servicio agendado
       const agendado = await this.ServicioAgendadoService.crearAgenda(data);
 
       return {
@@ -92,7 +91,15 @@ export class ServicioAgendadoController {
     }
   }
   
-
+  @Post('modificar-estado/:id')
+  async modificarEstadoServicio(@Param('id') id: number) {
+    try {
+      const agendaActualizada = await this.ServicioAgendadoService.modificarEstadoServicio(id);
+      return { message: 'Estado del servicio modificado correctamente', agenda: agendaActualizada };
+    } catch (error) {
+      return { message: 'Error al modificar el estado del servicio', error: error.message };
+    }
+  }
 
 
   
