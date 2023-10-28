@@ -22,7 +22,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { ServiciossController } from './servicioss/servicioss.controller';
 import { ServicioAgendadoModule } from './servicio_agendado/servicio_agendado.module';
 import { ServicioAgendado } from './servicio_agendado/entities/servicio_agendado.entity';
-
+import { MercadoPagoController } from './mercadopago/mercadopago.controller';
+import { MercadoPagoService } from './mercadopago/mercadopago.service';
+import { MercadoModule } from './mercadopago/mercado.module';
 @Module({
 
   imports: [
@@ -47,7 +49,7 @@ import { ServicioAgendado } from './servicio_agendado/entities/servicio_agendado
       // entities: [__dirname+"/*/.entity{.ts,.js}"],//
       synchronize: true,
     }),
-
+    MercadoModule,
     PruebaModule,
     UsuarioModule,
     UsuarioAdminModule,
