@@ -2,18 +2,24 @@ import { Injectable } from '@nestjs/common';
 import { CreateNuestrosTrabajoDto } from './dto/create-nuestros_trabajo.dto';
 import { UpdateNuestrosTrabajoDto } from './dto/update-nuestros_trabajo.dto';
 import { NuestrosTrabajo } from './entities/nuestros_trabajo.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 
 
 
 @Injectable()
 export class NuestrosTrabajosService {
+  constructor(
+    @InjectRepository(NuestrosTrabajo)
+    private nuestrosTrabajoRepository: Repository<NuestrosTrabajo>,
+  ) {}
   private nuestrosTrabajos: NuestrosTrabajo[] = [];
 
   
-  create(createNuestrosTrabajoDto: NuestrosTrabajo) {
-    this.nuestrosTrabajos.push(createNuestrosTrabajoDto);
-    return createNuestrosTrabajoDto;
+  async create(createNuestrosTrabajoDto: NuestrosTrabajo) {
+    const trabajo = this.nuestrosTrabajoRepository.create(createNuestrosTrabajoDto);
+    return await this.nuestrosTrabajoRepository.save(trabajo);
   }
 
   findAll() {
