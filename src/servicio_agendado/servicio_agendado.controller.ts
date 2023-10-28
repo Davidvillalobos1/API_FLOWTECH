@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Res } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Res, Put } from '@nestjs/common';
 import { ServicioAgendadoService } from './servicio_agendado.service';
 import { ServicioAgendado } from './entities/servicio_agendado.entity';
 import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
@@ -91,7 +91,7 @@ export class ServicioAgendadoController {
     }
   }
   
-  @Post('modificar-estado/:id')
+  @Put('modificar-estado/:id')
   async modificarEstadoServicio(@Param('id') id: number) {
     try {
       const agendaActualizada = await this.ServicioAgendadoService.modificarEstadoServicio(id);
