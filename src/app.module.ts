@@ -9,10 +9,8 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { UsuarioAdminModule } from './usuario_admin/usuario_admin.module';
 import { ServicioModule } from './servicio/servicio.module';
 import { NuestrosTrabajosModule } from './nuestros_trabajos/nuestros_trabajos.module';
-import { EstadoServicioModule } from './estado_servicio/estado_servicio.module';
 import { InventarioModule } from './inventario/inventario.module';
 import { Contacto } from './contacto/entities/contacto.entity';
-import { EstadoServicio } from './estado_servicio/entities/estado_servicio.entity';
 import { Inventario } from './inventario/entities/inventario.entity';
 import { NuestrosTrabajo } from './nuestros_trabajos/entities/nuestros_trabajo.entity';
 import { Servicio } from './servicio/entities/servicio.entity';
@@ -38,7 +36,6 @@ import { MercadoModule } from './mercadopago/mercado.module';
       database: 'flowtech',
       entities: [
         Contacto,
-        EstadoServicio,
         Inventario,
         NuestrosTrabajo,
         Servicio,
@@ -55,7 +52,6 @@ import { MercadoModule } from './mercadopago/mercado.module';
     UsuarioAdminModule,
     ServicioModule,
     NuestrosTrabajosModule,
-    EstadoServicioModule,
     ServicioAgendadoModule,
     InventarioModule,
     TypeOrmModule.forFeature([Usuario]),
