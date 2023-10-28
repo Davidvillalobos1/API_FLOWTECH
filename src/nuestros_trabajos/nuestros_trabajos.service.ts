@@ -22,25 +22,22 @@ export class NuestrosTrabajosService {
     return await this.nuestrosTrabajoRepository.save(trabajo);
   }
 
-  findAll() {
-    return this.nuestrosTrabajos;
+  async findAll(): Promise<NuestrosTrabajo[]> {
+    return await this.nuestrosTrabajoRepository.find();
   }
-
-
-
-
-
+    
   
 
-  findOne(id: number) {
+
+   async findOne(id: number) {
     return `This action returns a #${id} nuestrosTrabajo`;
   }
 
-  update(id: number, updateNuestrosTrabajoDto: UpdateNuestrosTrabajoDto) {
+  async update(id: number, updateNuestrosTrabajoDto: UpdateNuestrosTrabajoDto) {
     return `This action updates a #${id} nuestrosTrabajo`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} nuestrosTrabajo`;
   }
 }

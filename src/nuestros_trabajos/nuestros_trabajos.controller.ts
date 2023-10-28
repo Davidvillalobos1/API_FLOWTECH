@@ -15,7 +15,7 @@ export class NuestrosTrabajosController {
   }
 
   @Get()
-  findAll() {
+  async findAll(): Promise<NuestrosTrabajo[]> {
     return this.nuestrosTrabajosService.findAll();
   }
 
