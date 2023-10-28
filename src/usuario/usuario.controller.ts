@@ -76,4 +76,10 @@ export class UsuarioController {
       message: 'cerrado sesion'
     }
   }
+
+  @Get('verificar-correo/:email')
+  async verificarCorreo(@Param('email') email: string) {
+    const existingUser = await this.usuarioService.findOneByEmail(email);
+    return { existe: !!existingUser };
+  }
 }
