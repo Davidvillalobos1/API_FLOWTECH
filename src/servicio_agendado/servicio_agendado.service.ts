@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { Servicio } from 'src/servicio/entities/servicio.entity';
 import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
-
+import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class ServicioAgendadoService {
@@ -99,5 +99,62 @@ export class ServicioAgendadoService {
       throw new Error('Error');
     }
 }
+
+
+async enviarCorreoElectronico(destinatario: string, asunto: string, cuerpo: string) {
+  try {
+    const transporter = nodemailer.createTransport({
+      
+      service: 'Gmail',
+      auth: {
+        user: 'flowtech2023a@gmail.com',
+        pass: 'portafolio2023',
+      },
+    });
+
+    const mailOptions = {
+      from: 'flowtech2023a@gmail.com',
+      to: destinatario,
+      subject: asunto,
+      text: cuerpo,
+    };
+
+    
+    await transporter.sendMail(mailOptions);
+
+    console.log('Correo electrónico enviado con éxito');
+  } catch (error) {
+    console.error('Error al enviar el correo electrónico', error);
+  }
+}
+
+async enviarCorreo(destinatario: string, asunto: string, cuerpo: string): Promise<void> {
+  try {
+    const transporter = nodemailer.createTransport({
+      
+      service: 'Gmail',
+      auth: {
+        user: 'flowtech2023a@gmail.com',
+        pass: 'portafolio2023',
+      },
+    });
+
+    const mailOptions = {
+      from: 'flowtech2023a@gmail.com',
+      to: destinatario,
+      subject: asunto,
+      text: cuerpo,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    console.log('Correo electrónico enviado con éxito');
+  } catch (error) {
+    console.error('Error al enviar el correo electrónico', error);
+    throw new Error('No se pudo enviar el correo electrónico');
+  }
+}
+
+
 }
 

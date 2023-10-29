@@ -101,7 +101,21 @@ export class ServicioAgendadoController {
     }
   }
 
+  @Post('enviar-correo')
+  async enviarCorreo(@Body() data: any) {
+    const destinatario = data.destinatario;
+    const asunto = data.asunto;
+    const cuerpo = data.cuerpo;
 
+    try {
+      // Llama a una función en el servicio para enviar el correo electrónico
+      await this.ServicioAgendadoService.enviarCorreo(destinatario, asunto, cuerpo);
+      return { mensaje: 'Correo electrónico enviado con éxito' };
+    } catch (error) {
+      console.error('Error al enviar el correo electrónico', error);
+      throw new Error('No se pudo enviar el correo electrónico');
+    }
+  }
   
 
 
