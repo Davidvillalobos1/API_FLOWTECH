@@ -33,9 +33,9 @@ export class ContactoService {
         from: 'flowtech2023a@gmail.com',
         to: 'flowtech2023a@gmail.com',
         subject: 'Servicio',
-        text: `${contactoData.nombre_mensaje} 
-        ${contactoData.apellido_mensaje},${contactoData.email_mensaje},${contactoData.telefono_mensaje} 
-        . Email:${contactoData.mensaje_mensaje}`,
+        text: `Nombre: ${contactoData.nombre_mensaje} 
+        Apellido: ${contactoData.apellido_mensaje},Email: ${contactoData.email_mensaje}, Telefono: ${contactoData.telefono_mensaje} 
+        . Mensaje:${contactoData.mensaje_mensaje}`,
       };
 
       await transporter.sendMail(gmail);
