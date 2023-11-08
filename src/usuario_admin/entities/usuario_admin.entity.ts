@@ -1,10 +1,8 @@
-import { type } from "os"
 import { Contacto } from "src/contacto/entities/contacto.entity"
 import { Inventario } from "src/inventario/entities/inventario.entity"
 import { NuestrosTrabajo } from "src/nuestros_trabajos/entities/nuestros_trabajo.entity"
 import { Servicio } from "src/servicio/entities/servicio.entity"
-import { Usuario } from "src/usuario/entities/usuario.entity"
-import { Column, PrimaryGeneratedColumn, Entity, OneToMany, OneToOne } from "typeorm"
+import { Column, PrimaryGeneratedColumn, Entity, OneToMany} from "typeorm"
 
 
 @Entity()

@@ -31,8 +31,7 @@ export class UsuarioAdminService {
 
   async comparePasswords(plainTextPassword: string, hashedPassword: string): Promise<boolean> {
     if (!plainTextPassword || !hashedPassword) {
-      // Manejar el caso en el que falta uno de los datos.
-      return false; // O lanzar un error si prefieres.
+      return false;
     }
   
     return bcrypt.compare(plainTextPassword, hashedPassword);

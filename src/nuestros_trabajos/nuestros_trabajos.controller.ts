@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { NuestrosTrabajosService } from './nuestros_trabajos.service';
-import { CreateNuestrosTrabajoDto } from './dto/create-nuestros_trabajo.dto';
 import { UpdateNuestrosTrabajoDto } from './dto/update-nuestros_trabajo.dto';
 import { NuestrosTrabajo } from './entities/nuestros_trabajo.entity';
 

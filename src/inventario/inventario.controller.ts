@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { InventarioService } from './inventario.service';
 import { CreateInventarioDto } from './dto/create-inventario.dto';
 import { UpdateInventarioDto } from './dto/update-inventario.dto';
@@ -20,10 +20,6 @@ export class InventarioController {
     const productos = await this.inventarioService.obtenerProductos();
     return { data: productos }; // Devuelve los productos en formato JSON
   }
-
-
-
-
 
   @Post()
   create(@Body() createInventarioDto: CreateInventarioDto) {

@@ -31,7 +31,6 @@ export class UsuarioAdminController {
       return { message: 'Error de inicio de sesión. Verifica tus credenciales.' };
     } catch (error) {
       console.error('Error en la función login:', error);
-      // Puedes agregar un manejo de errores apropiado aquí, como devolver un mensaje de error específico.
       return { message: 'Error en la función login. Por favor, inténtalo de nuevo.' };
     }
 

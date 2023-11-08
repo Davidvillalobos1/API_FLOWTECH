@@ -1,11 +1,9 @@
-import { type } from 'os';
 import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { UsuarioAdmin } from 'src/usuario_admin/entities/usuario_admin.entity';
 import {
   Column,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 

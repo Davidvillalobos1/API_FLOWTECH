@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateNuestrosTrabajoDto } from './dto/create-nuestros_trabajo.dto';
 import { UpdateNuestrosTrabajoDto } from './dto/update-nuestros_trabajo.dto';
 import { NuestrosTrabajo } from './entities/nuestros_trabajo.entity';
 import { InjectRepository } from '@nestjs/typeorm';

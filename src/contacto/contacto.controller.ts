@@ -34,7 +34,7 @@ export class ContactoController {
   @Get('mensajes')
   async getMensajes(): Promise<any> {
     try {
-      const mensajes = await this.contactoService.getMensajes(); // Asegúrate de implementar este método en tu servicio
+      const mensajes = await this.contactoService.getMensajes();
       return {
         message: 'Mensajes obtenidos exitosamente',
         data: mensajes,

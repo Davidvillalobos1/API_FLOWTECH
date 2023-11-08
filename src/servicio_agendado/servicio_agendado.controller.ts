@@ -3,7 +3,6 @@ import { ServicioAgendadoService } from './servicio_agendado.service';
 import { ServicioAgendado } from './entities/servicio_agendado.entity';
 import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
 import { Response } from 'express';
-import { MercadoPagoService } from 'src/mercadopago/mercadopago.service';
 
 @Controller('pagos')
 export class PagosController {

@@ -1,10 +1,8 @@
-import { type } from 'os';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Servicio } from 'src/servicio/entities/servicio.entity';

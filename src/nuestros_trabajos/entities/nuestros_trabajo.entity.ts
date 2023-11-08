@@ -1,4 +1,3 @@
-import { Servicio } from "src/servicio/entities/servicio.entity"
 import { UsuarioAdmin } from "src/usuario_admin/entities/usuario_admin.entity"
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm"
 

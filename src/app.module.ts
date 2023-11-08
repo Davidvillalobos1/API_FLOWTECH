@@ -3,8 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ContactoModule } from './contacto/contacto.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PruebaModule } from './prueba/prueba.module';
-import { Prueba } from './prueba/entities/prueba.entity';
 import { UsuarioModule } from './usuario/usuario.module';
 import { UsuarioAdminModule } from './usuario_admin/usuario_admin.module';
 import { ServicioModule } from './servicio/servicio.module';
@@ -17,11 +15,8 @@ import { Servicio } from './servicio/entities/servicio.entity';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { UsuarioAdmin } from './usuario_admin/entities/usuario_admin.entity';
 import { JwtModule } from '@nestjs/jwt';
-import { ServiciossController } from './servicioss/servicioss.controller';
 import { ServicioAgendadoModule } from './servicio_agendado/servicio_agendado.module';
 import { ServicioAgendado } from './servicio_agendado/entities/servicio_agendado.entity';
-import { MercadoPagoController } from './mercadopago/mercadopago.controller';
-import { MercadoPagoService } from './mercadopago/mercadopago.service';
 import { MercadoModule } from './mercadopago/mercado.module';
 @Module({
 
@@ -43,11 +38,10 @@ import { MercadoModule } from './mercadopago/mercado.module';
         UsuarioAdmin,
         ServicioAgendado,
       ],
-      // entities: [__dirname+"/*/.entity{.ts,.js}"],//
+     
       synchronize: true,
     }),
     MercadoModule,
-    PruebaModule,
     UsuarioModule,
     UsuarioAdminModule,
     ServicioModule,
@@ -61,7 +55,7 @@ import { MercadoModule } from './mercadopago/mercado.module';
     }),
   ],
 
-  controllers: [AppController, ServiciossController],
+  controllers: [AppController],
   providers: [AppService],
   exports: [AppService]
 })

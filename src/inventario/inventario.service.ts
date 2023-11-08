@@ -25,16 +25,16 @@ export class InventarioService {
       return this.inventarioRepository.save(nuevoInventario);
     } catch (error) {
       console.error(error.message);
-      throw error; // Lanza una excepción en caso de error
+      throw error;
     }
   }
 
   async obtenerProductos(): Promise<Inventario[]> {
     try {
-      return this.inventarioRepository.find(); // Obtiene todos los productos
+      return this.inventarioRepository.find();
     } catch (error) {
       console.error(error.message);
-      throw error; // Lanza una excepción en caso de error
+      throw error;
     }
   }
 

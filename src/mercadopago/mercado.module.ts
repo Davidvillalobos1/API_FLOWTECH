@@ -1,7 +1,6 @@
 import {forwardRef, Module } from '@nestjs/common';
 import { MercadoPagoController } from './mercadopago.controller';
 import { MercadoPagoService } from './mercadopago.service';
-
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Servicio } from 'src/servicio/entities/servicio.entity';
 import { ServicioAgendadoModule } from 'src/servicio_agendado/servicio_agendado.module';
@@ -9,7 +8,7 @@ import { ServicioAgendadoModule } from 'src/servicio_agendado/servicio_agendado.
 @Module({
   imports: [
     TypeOrmModule.forFeature([Servicio]),
-    forwardRef(() => ServicioAgendadoModule), // Asegúrate de importar el módulo aquí
+    forwardRef(() => ServicioAgendadoModule),
   ],
   controllers: [MercadoPagoController],
   providers: [MercadoPagoService],

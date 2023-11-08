@@ -12,15 +12,10 @@ export class ContactoService {
     @InjectRepository(Contacto)
     private readonly contactoRepository: Repository<Contacto>,
   ) {}
-  //Se crea un nuevo contacto
   async crearContacto(contactoData: Partial<Contacto>): Promise<Contacto> {
     try {
-      //Creacion de instancia para contacto
       const contacto = this.contactoRepository.create(contactoData);
-      //Guardado del contacto en nuestra base de datos.
       const nuevoContacto = await this.contactoRepository.save(contacto);
-
-      //Se hace envio al correo de la Pyme
       const transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
@@ -41,14 +36,13 @@ export class ContactoService {
       await transporter.sendMail(gmail);
       return nuevoContacto;
     } catch (error) {
-      //En caso de error manda un mensaje en la consola.
       console.error('Error al crear el contacto', error);
     }
   }
 
   async getMensajes(): Promise<Contacto[]> {
     try {
-      const mensajes = await this.contactoRepository.find(); // Esto obtiene todos los mensajes almacenados
+      const mensajes = await this.contactoRepository.find();
       return mensajes;
     } catch (error) {
       console.error('Error al obtener los mensajes', error);
