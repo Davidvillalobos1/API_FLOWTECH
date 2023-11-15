@@ -8,10 +8,11 @@ import { Inventario } from 'src/inventario/entities/inventario.entity';
 export class InventarioController {
   constructor(private readonly inventarioService: InventarioService) {}
 
-  @Post('')
-  async agregarProducto(@Body(new ValidationPipe()) inventarioData: Inventario) {
+  @Post('agregar-producto')
+  async agregarProducto(@Body() inventarioData: Inventario) {
     return this.inventarioService.agregarProducto(inventarioData);
   }
+
   @Get()
   async findAll() {
     const productos = await this.inventarioService.obtenerProductos();
@@ -22,8 +23,6 @@ export class InventarioController {
   create(@Body() createInventarioDto: CreateInventarioDto) {
     return this.inventarioService.create(createInventarioDto);
   }
-
-
 
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -39,9 +38,4 @@ export class InventarioController {
   delete(@Param('id') id: string) {
     return this.inventarioService.delete(+id);
   }
-
-
-
-
-  
 }

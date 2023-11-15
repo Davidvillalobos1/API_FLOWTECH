@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsNumber, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
 
 export class CreateInventarioDto {
   @IsNotEmpty()
@@ -17,8 +17,8 @@ export class CreateInventarioDto {
   @IsNumber()
   cantidad_producto: number;
 
-
-  @MinLength(1, { message: 'El historial debe tener almenos 1 letra' })
+  
+@IsNotEmpty()
   @IsString()
   historial_producto: string;
 }
