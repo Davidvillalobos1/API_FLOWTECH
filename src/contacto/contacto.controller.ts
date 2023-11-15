@@ -8,7 +8,7 @@ import { validate } from 'class-validator';
 export class ContactoController {
   constructor(private readonly contactoService: ContactoService) {}
 
-  @Post('crear')
+  @Post('')
   async crearContacto(@Body() createContactoDto: CreateContactoDto): Promise<any> {
     try {
       const contactoDtoInstance = plainToClass(CreateContactoDto, createContactoDto);
