@@ -6,7 +6,7 @@ import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { Servicio } from 'src/servicio/entities/servicio.entity';
 import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
 import * as nodemailer from 'nodemailer';
-import { validate } from 'class-validator';
+
 
 @Injectable()
 export class ServicioAgendadoService {
@@ -54,18 +54,13 @@ export class ServicioAgendadoService {
 
   async crearAgenda(ServicioAgendadoData: CreateServicioAgendadoDto): Promise<ServicioAgendado> {
     try {
-      const errors = await validate(ServicioAgendadoData, { skipMissingProperties: true });
-
-      if (errors.length > 0) {
-        this.handleException('Error de validación', HttpStatus.BAD_REQUEST);
-      }
       const usuario = await this.usuarioRepository.findOne({ where: { email: ServicioAgendadoData.email } });
       const servicio = await this.servicioRepository.findOne({ where: { id: ServicioAgendadoData.servicioId } });
-
+  
       if (!usuario || !servicio) {
         this.handleException('Usuario o servicio no encontrado', HttpStatus.NOT_FOUND);
       }
-
+  
       const agenda = this.ServicioAgendadoRepository.create({
         comuna: ServicioAgendadoData.comuna,
         direccion: ServicioAgendadoData.direccion,
@@ -75,7 +70,7 @@ export class ServicioAgendadoService {
         usuario: usuario,
         estado_servicio: ServicioAgendadoData.estado_servicio,
       });
-
+  
       const nuevaAgenda = await this.ServicioAgendadoRepository.save(agenda);
       return nuevaAgenda;
     } catch (error) {
@@ -83,6 +78,7 @@ export class ServicioAgendadoService {
       this.handleException('Error interno del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  
 
   async modificarEstadoServicio(id: number): Promise<ServicioAgendado> {
     try {
