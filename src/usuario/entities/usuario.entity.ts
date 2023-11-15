@@ -1,4 +1,3 @@
-import { type } from "os"
 import { Contacto } from "src/contacto/entities/contacto.entity"
 import { Servicio } from "src/servicio/entities/servicio.entity"
 import { Column, PrimaryGeneratedColumn, Entity, OneToOne, OneToMany, ManyToMany, ManyToOne } from "typeorm"

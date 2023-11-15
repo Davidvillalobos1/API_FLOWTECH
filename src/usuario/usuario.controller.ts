@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, BadRequestException } from '@nestjs/common';
-
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, BadRequestException, HttpStatus, ValidationPipe, UsePipes } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { Response, Request } from 'express';
 import { UsuarioService } from './usuario.service';
+import { CreateUsuarioDto } from './dto/create-usuario.dto';
+import { validate } from 'class-validator';
 
 @Controller('usuario')
 export class UsuarioController {
@@ -11,59 +12,62 @@ export class UsuarioController {
     private readonly usuarioService: UsuarioService,
     private jwtService: JwtService) { }
 
-    @Post('registrarse')
-    async register(
-      @Body('nombre') nombre: string,
-      @Body('apellido') apellido: string,
-      @Body('email') email: string,
-      @Body('contrasena') contrasena: string
-    ) {
-      const hashedPassword = await bcrypt.hash(contrasena, 12);
-  
-      
-      const existingUser = await this.usuarioService.findOneByEmail(email);
+  @Post('registrarse')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async register(@Body() usuarioDto: CreateUsuarioDto) {
+    const hashedPassword = await bcrypt.hash(usuarioDto.contrasena, 12);
+
+    try {
+      const existingUser = await this.usuarioService.findOneByEmail(usuarioDto.email);
       if (existingUser) {
         throw new BadRequestException('El correo electrónico ya está registrado');
       }
-  
+
       const user = await this.usuarioService.create({
-        nombre,
-        apellido,
-        email,
+        nombre: usuarioDto.nombre,
+        apellido: usuarioDto.apellido,
+        email: usuarioDto.email,
         contrasena: hashedPassword
       });
-  
+
       const jwt = await this.jwtService.signAsync({ id: user.id });
       return {
         message: 'Usuario registrado exitosamente',
         token: jwt,
       };
+    } catch (error) {
+      return this.handleException(error, HttpStatus.BAD_REQUEST);
     }
+  }
   @Post('login')
   async login(
     @Body('email') email: string,
     @Body('contrasena') contrasena: string,
     @Res({ passthrough: true }) response: Response
   ) {
-    const usuario = await this.usuarioService.findOneByEmail(email);
+    try {
+      const usuario = await this.usuarioService.findOneByEmail(email);
 
-    if (!usuario) {
-      throw new BadRequestException('Credenciales inválidas');
+      if (!usuario) {
+        throw new BadRequestException('Credenciales inválidas');
+      }
+
+      const passwordMatch = await bcrypt.compare(contrasena, usuario.contrasena);
+
+      if (!passwordMatch) {
+        throw new BadRequestException('Credenciales inválidas');
+      }
+
+      const jwt = await this.jwtService.signAsync({ id: usuario.id, email: usuario.email });
+      response.cookie('jwt', jwt, { httpOnly: true });
+
+      return {
+        message: 'Inicio de sesión correcto',
+        token: jwt,
+      };
+    } catch (error) {
+      return this.handleException(error.message, HttpStatus.BAD_REQUEST);
     }
-
-    const passwordMatch = await bcrypt.compare(contrasena, usuario.contrasena);
-
-    if (!passwordMatch) {
-      throw new BadRequestException('Credenciales inválidas');
-    }
-
-    const jwt = await this.jwtService.signAsync({ id: usuario.id, email: usuario.email });
-    response.cookie('jwt', jwt, { httpOnly: true });
-
-    return {
-      message: 'Inicio de sesión correcto',
-      token: jwt,
-    };
   }
 
 
@@ -81,5 +85,9 @@ export class UsuarioController {
   async verificarCorreo(@Param('email') email: string) {
     const existingUser = await this.usuarioService.findOneByEmail(email);
     return { existe: !!existingUser };
+  }
+
+  private handleException(error: any, status: HttpStatus): never {
+    throw new BadRequestException({ message: error.message || 'Error interno del servidor', status });
   }
 }
