@@ -42,7 +42,7 @@ export class InventarioService {
   }
 
   findOne(id: number) : Promise<Inventario> {
-    return  this.inventarioRepository.findOneById(id); //actualizar//
+    return  this.inventarioRepository.findOne({where:{id}});
   }
 
   update(id: number, updateInventarioDto: UpdateInventarioDto) {

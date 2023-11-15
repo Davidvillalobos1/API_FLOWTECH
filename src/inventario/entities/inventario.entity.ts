@@ -27,6 +27,11 @@ export class Inventario {
   @Column()
   cantidad_producto: number;
 
+  @IsNotEmpty()
+  @IsString()
+  @Column()
+  historial_producto: string;
+
   @ManyToOne(type => UsuarioAdmin, usuarioadmin => usuarioadmin.inventario)
   usuarioadmin: UsuarioAdmin;
 }
