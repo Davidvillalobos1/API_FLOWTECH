@@ -15,10 +15,11 @@ export class ContactoController {
       const errors = await validate(contactoDtoInstance);
 
       if (errors.length > 0) {
-        throw new HttpException(
-          { statusCode: HttpStatus.BAD_REQUEST, message: 'Error de validación', errors },
-          HttpStatus.BAD_REQUEST,
-        );
+        console.log('Errores de validación:', errors);
+        return {
+          message: 'Error de validación',
+          errors,
+        };
       }
 
       const contacto = await this.contactoService.crearContacto(contactoDtoInstance);
