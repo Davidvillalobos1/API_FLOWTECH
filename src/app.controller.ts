@@ -1,4 +1,4 @@
-import {Controller} from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 
 
 
@@ -8,7 +8,7 @@ export class AppController {
     throw new Error('Method not implemented.');
   }
   constructor(
-    ) { }
+  ) { }
 
 }
 

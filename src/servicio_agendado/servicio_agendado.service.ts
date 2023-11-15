@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { ServicioAgendado } from './entities/servicio_agendado.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,6 +6,7 @@ import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { Servicio } from 'src/servicio/entities/servicio.entity';
 import { CreateServicioAgendadoDto } from './dto/create-servicio_agendado.dto';
 import * as nodemailer from 'nodemailer';
+import { validate } from 'class-validator';
 
 @Injectable()
 export class ServicioAgendadoService {
@@ -18,11 +19,7 @@ export class ServicioAgendadoService {
 
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
-
-    
-
   ) {}
-
 
   async traerPorCorreoUsuario(email: string): Promise<ServicioAgendado[]> {
     try {
@@ -31,7 +28,7 @@ export class ServicioAgendadoService {
       return agendas;
     } catch (error) {
       console.error('Error al traer los servicios agendados por correo de usuario', error);
-      throw new Error('Error');
+      this.handleException('Error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -41,26 +38,34 @@ export class ServicioAgendadoService {
       return agendas;
     } catch (error) {
       console.error('Error al traer todos los agendas', error);
-      throw new Error('Error');
+      this.handleException('Error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   async traerporId(id: number): Promise<ServicioAgendado> {
     try {
-      const agenda = await this.ServicioAgendadoRepository.findOne({where: {id: id}});
+      const agenda = await this.ServicioAgendadoRepository.findOne({ where: { id } });
       return agenda;
     } catch (error) {
       console.error('Error al traer una agenda', error);
-      throw new Error('Error');
+      this.handleException('Error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   async crearAgenda(ServicioAgendadoData: CreateServicioAgendadoDto): Promise<ServicioAgendado> {
     try {
-      console.log(ServicioAgendadoData);
+      const errors = await validate(ServicioAgendadoData, { skipMissingProperties: true });
+
+      if (errors.length > 0) {
+        this.handleException('Error de validación', HttpStatus.BAD_REQUEST);
+      }
       const usuario = await this.usuarioRepository.findOne({ where: { email: ServicioAgendadoData.email } });
-      const servicio = await this.servicioRepository.findOne({ where: { id: ServicioAgendadoData.servicioId } }); // Utiliza el servicioId proporcionado en lugar de ServicioAgendadoData.servicio
-      
+      const servicio = await this.servicioRepository.findOne({ where: { id: ServicioAgendadoData.servicioId } });
+
+      if (!usuario || !servicio) {
+        this.handleException('Usuario o servicio no encontrado', HttpStatus.NOT_FOUND);
+      }
+
       const agenda = this.ServicioAgendadoRepository.create({
         comuna: ServicioAgendadoData.comuna,
         direccion: ServicioAgendadoData.direccion,
@@ -69,92 +74,87 @@ export class ServicioAgendadoService {
         servicio: servicio,
         usuario: usuario,
         estado_servicio: ServicioAgendadoData.estado_servicio,
-        
       });
+
       const nuevaAgenda = await this.ServicioAgendadoRepository.save(agenda);
       return nuevaAgenda;
     } catch (error) {
       console.error('Error al crear una agenda', error);
-      throw new Error('Error');
+      this.handleException('Error interno del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  
-
-  
 
   async modificarEstadoServicio(id: number): Promise<ServicioAgendado> {
     try {
       const agenda = await this.ServicioAgendadoRepository.findOne({ where: { id } });
-  
+
       if (!agenda) {
-        throw new Error('Agenda no encontrada');
+        this.handleException('Agenda no encontrada', HttpStatus.NOT_FOUND);
       }
-  
-      agenda.estado_servicio = 'SI TERMINADO'; 
+
+      agenda.estado_servicio = 'SI TERMINADO';
       const agendaActualizada = await this.ServicioAgendadoRepository.save(agenda);
-  
+
       return agendaActualizada;
     } catch (error) {
       console.error('Error al modificar el estado del servicio', error);
-      throw new Error('Error');
+      this.handleException('Error interno del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-}
+  }
 
+  async enviarCorreoElectronico(destinatario: string, asunto: string, cuerpo: string) {
+    try {
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: 'flowtech2023a@gmail.com',
+          pass: 'portafolio2023',
+        },
+      });
 
-async enviarCorreoElectronico(destinatario: string, asunto: string, cuerpo: string) {
-  try {
-    const transporter = nodemailer.createTransport({
-      
-      service: 'Gmail',
-      auth: {
-        user: 'flowtech2023a@gmail.com',
-        pass: 'portafolio2023',
-      },
-    });
+      const mailOptions = {
+        from: 'flowtech2023a@gmail.com',
+        to: destinatario,
+        subject: asunto,
+        text: cuerpo,
+      };
 
-    const mailOptions = {
-      from: 'flowtech2023a@gmail.com',
-      to: destinatario,
-      subject: asunto,
-      text: cuerpo,
-    };
+      await transporter.sendMail(mailOptions);
 
-    
-    await transporter.sendMail(mailOptions);
+      console.log('Correo electrónico enviado con éxito');
+    } catch (error) {
+      console.error('Error al enviar el correo electrónico', error);
+      this.handleException('Error interno del servidor', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 
-    console.log('Correo electrónico enviado con éxito');
-  } catch (error) {
-    console.error('Error al enviar el correo electrónico', error);
+  async enviarCorreo(destinatario: string, asunto: string, cuerpo: string): Promise<void> {
+    try {
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: 'flowtech2023a@gmail.com',
+          pass: 'portafolio2023',
+        },
+      });
+
+      const mailOptions = {
+        from: 'flowtech2023a@gmail.com',
+        to: destinatario,
+        subject: asunto,
+        text: cuerpo,
+      };
+
+      await transporter.sendMail(mailOptions);
+
+      console.log('Correo electrónico enviado con éxito');
+    } catch (error) {
+      console.error('Error al enviar el correo electrónico', error);
+      this.handleException('No se pudo enviar el correo electrónico', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  private handleException(message: string, status: HttpStatus): never {
+    throw new HttpException(message, status);
   }
 }
-
-async enviarCorreo(destinatario: string, asunto: string, cuerpo: string): Promise<void> {
-  try {
-    const transporter = nodemailer.createTransport({
-      
-      service: 'Gmail',
-      auth: {
-        user: 'flowtech2023a@gmail.com',
-        pass: 'portafolio2023',
-      },
-    });
-
-    const mailOptions = {
-      from: 'flowtech2023a@gmail.com',
-      to: destinatario,
-      subject: asunto,
-      text: cuerpo,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    console.log('Correo electrónico enviado con éxito');
-  } catch (error) {
-    console.error('Error al enviar el correo electrónico', error);
-    throw new Error('No se pudo enviar el correo electrónico');
-  }
-}
-
-
-}
-

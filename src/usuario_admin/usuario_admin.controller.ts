@@ -12,7 +12,7 @@ export class UsuarioAdminController {
   }
 
 
-  @Post('login') // Ruta para iniciar sesión
+  @Post('login') 
   async login(@Body() loginData: { email_admin: string; contrasena_admin: string }) {
     try {
       const usuario = await this.usuarioAdminService.findByEmail(loginData.email_admin);

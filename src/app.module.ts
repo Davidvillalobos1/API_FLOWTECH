@@ -38,7 +38,7 @@ import { MercadoModule } from './mercadopago/mercado.module';
         UsuarioAdmin,
         ServicioAgendado,
       ],
-     
+
       synchronize: true,
     }),
     MercadoModule,
@@ -59,4 +59,4 @@ import { MercadoModule } from './mercadopago/mercado.module';
   providers: [AppService],
   exports: [AppService]
 })
-export class AppModule {}
+export class AppModule { }

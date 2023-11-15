@@ -1,23 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateInventarioDto } from './dto/create-inventario.dto';
 import { UpdateInventarioDto } from './dto/update-inventario.dto';
 import { Inventario } from 'src/inventario/entities/inventario.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-
-
 @Injectable()
 export class InventarioService {
-
   constructor(
     @InjectRepository(Inventario)
     private inventarioRepository: Repository<Inventario>,
   ) {}
-
-
-
-
 
   async agregarProducto(inventarioData: Inventario): Promise<Inventario> {
     try {
@@ -25,7 +18,7 @@ export class InventarioService {
       return this.inventarioRepository.save(nuevoInventario);
     } catch (error) {
       console.error(error.message);
-      throw error;
+      this.handleException('Error al agregar el producto');
     }
   }
 
@@ -34,7 +27,7 @@ export class InventarioService {
       return this.inventarioRepository.find();
     } catch (error) {
       console.error(error.message);
-      throw error;
+      this.handleException('Error al obtener los productos');
     }
   }
 
@@ -49,7 +42,7 @@ export class InventarioService {
   }
 
   findOne(id: number) : Promise<Inventario> {
-    return  this.inventarioRepository.findOneById(id);
+    return  this.inventarioRepository.findOneById(id); //actualizar//
   }
 
   update(id: number, updateInventarioDto: UpdateInventarioDto) {
@@ -61,6 +54,14 @@ export class InventarioService {
  
 
   async delete(id: number): Promise<void> {
-    await this.inventarioRepository.delete(id);
+    try {
+      await this.inventarioRepository.delete(id);
+    } catch (error) {
+      console.error(error.message);
+      throw new HttpException('Error al eliminar el producto', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+  private handleException(message: string): never {
+    throw new HttpException(message, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

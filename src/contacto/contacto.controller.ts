@@ -1,26 +1,27 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
 import { ContactoService } from './contacto.service';
+import { CreateContactoDto } from './dto/create-contacto.dto';
+import { plainToClass } from 'class-transformer';
+import { validate } from 'class-validator';
 
-@Controller()
+@Controller('contacto')
 export class ContactoController {
   constructor(private readonly contactoService: ContactoService) {}
 
-  @Post('contacto')
-  async crearContacto(
-    @Body('nombre_mensaje') nombre_mensaje: string,
-    @Body('apellido_mensaje') apellido_mensaje: string,
-    @Body('email_mensaje') email_mensaje: string,
-    @Body('telefono_mensaje') telefono_mensaje: number,
-    @Body('mensaje_mensaje') mensaje_mensaje: string,
-  ): Promise<any> {
+  @Post('crear')
+  async crearContacto(@Body() createContactoDto: CreateContactoDto): Promise<any> {
     try {
-      const contacto = await this.contactoService.crearContacto({
-        nombre_mensaje,
-        apellido_mensaje,
-        email_mensaje,
-        telefono_mensaje,
-        mensaje_mensaje,
-      });
+      const contactoDtoInstance = plainToClass(CreateContactoDto, createContactoDto);
+      const errors = await validate(contactoDtoInstance);
+
+      if (errors.length > 0) {
+        throw new HttpException(
+          { statusCode: HttpStatus.BAD_REQUEST, message: 'Error de validación', errors },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      const contacto = await this.contactoService.crearContacto(contactoDtoInstance);
 
       return {
         message: 'Contacto creado exitosamente',
@@ -28,6 +29,10 @@ export class ContactoController {
       };
     } catch (error) {
       console.error('Error al crear el contacto', error);
+      throw new HttpException(
+        { statusCode: HttpStatus.BAD_REQUEST, message: 'Error al crear el contacto', error },
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -41,6 +46,10 @@ export class ContactoController {
       };
     } catch (error) {
       console.error('Error al obtener mensajes', error);
+      throw new HttpException(
+        { statusCode: HttpStatus.BAD_REQUEST, message: 'Error al obtener mensajes', error },
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

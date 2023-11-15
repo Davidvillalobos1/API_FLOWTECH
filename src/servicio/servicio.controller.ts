@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ServicioService } from './servicio.service';
-import { ServicioDto } from 'src/servicio/dto/servicio.dto';
+import { ServicioDto } from './dto/servicio.dto';
 
 @Controller('servicio')
 export class ServicioController {
@@ -17,11 +17,13 @@ export class ServicioController {
   }
 
   @Post()
+  @UsePipes(new ValidationPipe({ transform: true }))
   async create(@Body() servicioDto: ServicioDto) {
     return await this.servicioService.create(servicioDto);
   }
 
   @Put(':id')
+  @UsePipes(new ValidationPipe({ transform: true }))
   async update(@Param('id') id: number, @Body() servicioDto: ServicioDto) {
     return await this.servicioService.update(id, servicioDto);
   }

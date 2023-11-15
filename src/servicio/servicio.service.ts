@@ -16,7 +16,7 @@ export class ServicioService {
   }
 
   async findById(id: number): Promise<Servicio | undefined> {
-    return await this.servicioRepository.findOneById(id);
+    return await this.servicioRepository.findOne({where:{id}});
   }
 
   async create(servicioDto: ServicioDto): Promise<Servicio> {
@@ -34,7 +34,7 @@ export class ServicioService {
 
   async update(id: number, servicioDto: ServicioDto): Promise<Servicio> {
     await this.servicioRepository.update(id, servicioDto);
-    return await this.servicioRepository.findOneById(id);
+    return await this.servicioRepository.findOne({where:{id}});
   }
 
   async delete(id: number): Promise<void> {

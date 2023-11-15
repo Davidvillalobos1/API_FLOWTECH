@@ -1,24 +1,21 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, ValidationPipe } from '@nestjs/common';
 import { InventarioService } from './inventario.service';
 import { CreateInventarioDto } from './dto/create-inventario.dto';
 import { UpdateInventarioDto } from './dto/update-inventario.dto';
 import { Inventario } from 'src/inventario/entities/inventario.entity';
 
-
-
-
 @Controller('inventario')
 export class InventarioController {
   constructor(private readonly inventarioService: InventarioService) {}
-  @Post('agregar-producto')
-  async agregarProducto(@Body() inventarioData: Inventario) {
+
+  @Post('')
+  async agregarProducto(@Body(new ValidationPipe()) inventarioData: Inventario) {
     return this.inventarioService.agregarProducto(inventarioData);
   }
-
   @Get()
   async findAll() {
     const productos = await this.inventarioService.obtenerProductos();
-    return { data: productos }; // Devuelve los productos en formato JSON
+    return { data: productos };
   }
 
   @Post()

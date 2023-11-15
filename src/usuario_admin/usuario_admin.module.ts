@@ -7,8 +7,8 @@ import { UsuarioAdmin } from './entities/usuario_admin.entity';
 
 
 @Module({
-  imports:[TypeOrmModule.forFeature ([UsuarioAdmin])],
+  imports: [TypeOrmModule.forFeature([UsuarioAdmin])],
   controllers: [UsuarioAdminController],
   providers: [UsuarioAdminService],
 })
-export class UsuarioAdminModule {}
+export class UsuarioAdminModule { }

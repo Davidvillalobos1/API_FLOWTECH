@@ -10,7 +10,7 @@ export class UsuarioAdminService {
   constructor(
     @InjectRepository(UsuarioAdmin)
     private readonly usuarioAdminRepository: Repository<UsuarioAdmin>,
-  ) {}
+  ) { }
 
   async create(createUsuarioAdminDto: CreateUsuarioAdminDto): Promise<UsuarioAdmin> {
     const hashedPassword = await bcrypt.hash(createUsuarioAdminDto.contrasena_admin, 10);
@@ -33,7 +33,7 @@ export class UsuarioAdminService {
     if (!plainTextPassword || !hashedPassword) {
       return false;
     }
-  
+
     return bcrypt.compare(plainTextPassword, hashedPassword);
   }
 
