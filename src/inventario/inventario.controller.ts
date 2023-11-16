@@ -9,7 +9,7 @@ export class InventarioController {
   constructor(private readonly inventarioService: InventarioService) {}
 
   @Post('agregar-producto')
-  async agregarProducto(@Body() inventarioData: Inventario) {
+  async agregarProducto(@Body(new ValidationPipe()) inventarioData: Inventario) {
     return this.inventarioService.agregarProducto(inventarioData);
   }
 

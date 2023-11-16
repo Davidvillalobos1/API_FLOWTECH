@@ -1,35 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, BadRequestException, HttpStatus, ValidationPipe, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, Body, Res, BadRequestException, HttpStatus, ValidationPipe, UsePipes } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { Response, Request } from 'express';
+import { Response } from 'express';
 import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
-import { validate } from 'class-validator';
 
 @Controller('usuario')
 export class UsuarioController {
   constructor(
     private readonly usuarioService: UsuarioService,
-    private jwtService: JwtService) { }
+    private jwtService: JwtService,
+  ) {}
 
   @Post('registrarse')
   @UsePipes(new ValidationPipe({ transform: true }))
   async register(@Body() usuarioDto: CreateUsuarioDto) {
-    const hashedPassword = await bcrypt.hash(usuarioDto.contrasena, 12);
-
     try {
       const existingUser = await this.usuarioService.findOneByEmail(usuarioDto.email);
       if (existingUser) {
-        throw new BadRequestException('El correo electrónico ya está registrado');
+        throw new BadRequestException('El correo electrónico ya está registrado', 'CorreoRegistrado');
       }
 
+      const hashedPassword = await bcrypt.hash(usuarioDto.contrasena, 12);
       const user = await this.usuarioService.create({
         nombre: usuarioDto.nombre,
         apellido: usuarioDto.apellido,
         email: usuarioDto.email,
-        contrasena: hashedPassword
+        contrasena: hashedPassword,
       });
 
+      
       const jwt = await this.jwtService.signAsync({ id: user.id });
       return {
         message: 'Usuario registrado exitosamente',
@@ -39,23 +39,27 @@ export class UsuarioController {
       return this.handleException(error, HttpStatus.BAD_REQUEST);
     }
   }
+
   @Post('login')
   async login(
-    @Body('email') email: string,
-    @Body('contrasena') contrasena: string,
-    @Res({ passthrough: true }) response: Response
+    @Body() usuarioDto: CreateUsuarioDto,
+    @Res({ passthrough: true }) response: Response,
   ) {
     try {
-      const usuario = await this.usuarioService.findOneByEmail(email);
-
-      if (!usuario) {
-        throw new BadRequestException('Credenciales inválidas');
+      if (!usuarioDto.email || !usuarioDto.contrasena) {
+        throw new BadRequestException('Credenciales incompletas');
       }
 
-      const passwordMatch = await bcrypt.compare(contrasena, usuario.contrasena);
+      const usuario = await this.usuarioService.findOneByEmail(usuarioDto.email);
+
+      if (!usuario) {
+        throw new BadRequestException('Usuario no registrado', 'UsuarioNoRegistrado');
+      }
+
+      const passwordMatch = await bcrypt.compare(usuarioDto.contrasena, usuario.contrasena);
 
       if (!passwordMatch) {
-        throw new BadRequestException('Credenciales inválidas');
+        throw new BadRequestException('Credenciales inválidas', 'CredencialesInvalidas');
       }
 
       const jwt = await this.jwtService.signAsync({ id: usuario.id, email: usuario.email });
@@ -66,26 +70,28 @@ export class UsuarioController {
         token: jwt,
       };
     } catch (error) {
-      return this.handleException(error.message, HttpStatus.BAD_REQUEST);
+      if (error.response?.message === 'Usuario no registrado') {
+        
+        return {
+          message: error.response.message,
+          status: HttpStatus.BAD_REQUEST,
+        };
+      } else {
+        return this.handleException(error.message, HttpStatus.BAD_REQUEST);
+      }
     }
   }
-
-
 
   @Post('logout')
   async logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('jwt');
 
     return {
-      message: 'cerrado sesion'
-    }
+      message: 'Cerrado sesión',
+    };
   }
 
-  @Get('verificar-correo/:email')
-  async verificarCorreo(@Param('email') email: string) {
-    const existingUser = await this.usuarioService.findOneByEmail(email);
-    return { existe: !!existingUser };
-  }
+  
 
   private handleException(error: any, status: HttpStatus): never {
     throw new BadRequestException({ message: error.message || 'Error interno del servidor', status });
