@@ -9,7 +9,7 @@ export class ServicioDto {
   @IsNotEmpty({ message: 'La descripción del servicio no puede estar vacía' })
   descripcion_servicio: string;
 
-  @IsUrl({}, { message: 'La URL de la foto del servicio no es válida' })
+  @IsString({ message: 'La foto es necesaria' })
   @IsNotEmpty({ message: 'La foto del servicio no puede estar vacía' })
   foto_servicio: string;
 
