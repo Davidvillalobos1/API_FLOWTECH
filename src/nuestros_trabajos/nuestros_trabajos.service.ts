@@ -13,21 +13,37 @@ export class NuestrosTrabajosService {
     private nuestrosTrabajoRepository: Repository<NuestrosTrabajo>,
   ) {}
 
-  async create(createNuestrosTrabajoDto: CreateNuestrosTrabajoDto): Promise<NuestrosTrabajo> {
-    try {
-      const errors = await validate(createNuestrosTrabajoDto);
-      if (errors.length > 0) {
-        const validationErrorMessages = errors.map(error => Object.values(error.constraints)).join(', ');
-        throw new HttpException(validationErrorMessages, HttpStatus.BAD_REQUEST); //actualizar//
-      }
+  // async create(createNuestrosTrabajoDto: CreateNuestrosTrabajoDto): Promise<NuestrosTrabajo> {
+  //   try {
+  //     const errors = await validate(createNuestrosTrabajoDto);
+  //     if (errors.length > 0) {
+  //       const validationErrorMessages = errors.map(error => Object.values(error.constraints)).join(', ');
+  //       throw new HttpException(validationErrorMessages, HttpStatus.BAD_REQUEST); //actualizar//
+  //     }
 
-      const trabajo = this.nuestrosTrabajoRepository.create(createNuestrosTrabajoDto);
-      return await this.nuestrosTrabajoRepository.save(trabajo);
-    } catch (error) {
-      console.error('Error al crear el trabajo', error);
-      this.handleException('Error al crear el trabajo', HttpStatus.BAD_REQUEST);
-    }
+  //     const trabajo = this.nuestrosTrabajoRepository.create(createNuestrosTrabajoDto);
+  //     return await this.nuestrosTrabajoRepository.save(trabajo);
+  //   } catch (error) {
+  //     console.error('Error al crear el trabajo', error);
+  //     this.handleException('Error al crear el trabajo', HttpStatus.BAD_REQUEST);
+  //   }
+  // }
+
+ // NuestrosTrabajosService
+
+async create(createtrabajoDto: CreateNuestrosTrabajoDto): Promise<NuestrosTrabajo> {
+  try {
+    const trabajo = this.nuestrosTrabajoRepository.create(createtrabajoDto);
+
+    const savedTrabajo = await this.nuestrosTrabajoRepository.save(trabajo);
+
+    return savedTrabajo;
+  } catch (error) {
+    console.log(error.message);
+    throw new HttpException('Error al crear el trabajo', HttpStatus.BAD_REQUEST);
   }
+}
+
 
   async findAll(): Promise<NuestrosTrabajo[]> {
     try {

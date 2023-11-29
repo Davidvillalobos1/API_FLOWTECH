@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpException, HttpStatus, ValidationPipe, UsePipes } from '@nestjs/common';
 import { NuestrosTrabajosService } from './nuestros_trabajos.service';
 import { UpdateNuestrosTrabajoDto } from './dto/update-nuestros_trabajo.dto';
 import { NuestrosTrabajo } from './entities/nuestros_trabajo.entity';
@@ -8,19 +8,25 @@ import { CreateNuestrosTrabajoDto } from './dto/create-nuestros_trabajo.dto';
 export class NuestrosTrabajosController {
   constructor(private readonly nuestrosTrabajosService: NuestrosTrabajosService) {}
 
+  // @Post()
+  // async create(@Body(new ValidationPipe()) createNuestrosTrabajoDto: CreateNuestrosTrabajoDto): Promise<any> {
+  //   try {
+  //     const trabajo = await this.nuestrosTrabajosService.create(createNuestrosTrabajoDto);
+  //     return {
+  //       message: 'Trabajo creado exitosamente',
+  //       data: trabajo,
+  //     };
+  //   } catch (error) {
+  //     console.error('Error al crear el trabajo', error);
+  //     throw new HttpException('Error al crear el trabajo', HttpStatus.BAD_REQUEST);
+  //   }
+  
   @Post()
-  async create(@Body(new ValidationPipe()) createNuestrosTrabajoDto: CreateNuestrosTrabajoDto): Promise<any> {
-    try {
-      const trabajo = await this.nuestrosTrabajosService.create(createNuestrosTrabajoDto);
-      return {
-        message: 'Trabajo creado exitosamente',
-        data: trabajo,
-      };
-    } catch (error) {
-      console.error('Error al crear el trabajo', error);
-      throw new HttpException('Error al crear el trabajo', HttpStatus.BAD_REQUEST);
-    }
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async create(@Body()trabajoDto: CreateNuestrosTrabajoDto) {
+    return await this.nuestrosTrabajosService.create(trabajoDto);
   }
+
 
 
   @Get()

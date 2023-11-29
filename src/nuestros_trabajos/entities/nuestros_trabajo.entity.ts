@@ -10,7 +10,7 @@ export class NuestrosTrabajo {
     nombre_trabajo: string
 
 
-    @Column()
+    @Column("longtext")
     foto_trabajo: string
 
     @Column()

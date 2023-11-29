@@ -1,4 +1,4 @@
-import { IsString, MinLength } from 'class-validator';
+import { IsString, Max, Min, MinLength } from 'class-validator';
 
 export class CreateNuestrosTrabajoDto {
   @IsString()
@@ -6,7 +6,6 @@ export class CreateNuestrosTrabajoDto {
   nombre_trabajo: string;
 
   @IsString()
-  @MinLength(3, { message: 'La foto del trabajo debe tener al menos 3 caracteres' })
   foto_trabajo: string;
 
   @IsString()
